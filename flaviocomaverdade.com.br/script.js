@@ -565,125 +565,8 @@
 (function () {
   var SITE = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br";
 
-  /*
-   * BANCO DE IMAGENS NO GOOGLE DRIVE
-   * Adicione os outros arquivos nesta lista usando o ID de cada arquivo.
-   * O navegador pode bloquear o download via fetch por CORS; nesse caso,
-   * o compartilhamento abre o link do arquivo no WhatsApp como alternativa.
-   */
-  var BANCO_IMAGENS = [
-    {
-      nome: "imagem-banco-1.jpg",
-      id: "1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO",
-      url: "https://drive.google.com/uc?export=view&id=1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO",
-      link: "https://drive.google.com/file/d/1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO/view?usp=drive_link"
-    }
-  ];
-
-  function sortearImagemBanco() {
-    if (!BANCO_IMAGENS.length) {
-      return Promise.reject(new Error("Nenhuma imagem foi cadastrada no banco."));
-    }
-
-    var lista = BANCO_IMAGENS.slice();
-    for (var i = lista.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = lista[i];
-      lista[i] = lista[j];
-      lista[j] = temp;
-    }
-
-    var item = lista[0];
-    return fetch(item.url, { method: "GET" }).then(function (resposta) {
-      if (!resposta.ok) throw new Error("Não foi possível baixar a imagem do Google Drive.");
-      return resposta.blob();
-    }).then(function (blob) {
-      return { blob: blob, nome: item.nome, url: item.url, link: item.link };
-    });
-  }
-
-  function carregarImagemParaCompartilhar(url) {
-    return fetch(url)
-      .then(function (resposta) {
-        if (!resposta.ok) {
-          throw new Error("Arquivo não encontrado: " + url);
-        }
-
-        return resposta.blob();
-      })
-      .then(function (blob) {
-        if (
-          blob.type === "application/pdf" ||
-          /\.pdf(?:$|[?#])/i.test(url)
-        ) {
-          return new Promise(function (resolve, reject) {
-            function renderizarPDF() {
-              if (!window.pdfjsLib) {
-                reject(new Error("PDF.js não carregou."));
-                return;
-              }
-
-              window.pdfjsLib
-                .getDocument({ data: blob })
-                .promise
-                .then(function (pdf) {
-                  return pdf.getPage(1);
-                })
-                .then(function (pagina) {
-                  var viewport = pagina.getViewport({ scale: 2 });
-                  var canvas = document.createElement("canvas");
-
-                  canvas.width = Math.ceil(viewport.width);
-                  canvas.height = Math.ceil(viewport.height);
-
-                  return pagina.render({
-                    canvasContext: canvas.getContext("2d"),
-                    viewport: viewport
-                  }).promise.then(function () {
-                    return new Promise(function (res, rej) {
-                      canvas.toBlob(function (png) {
-                        canvas.width = 0;
-                        canvas.height = 0;
-
-                        if (png) {
-                          res(png);
-                        } else {
-                          rej(new Error("Falha ao converter PDF em imagem."));
-                        }
-                      }, "image/png");
-                    });
-                  });
-                })
-                .then(resolve, reject);
-            }
-
-            if (window.pdfjsLib) {
-              renderizarPDF();
-              return;
-            }
-
-            var script = document.createElement("script");
-            script.src =
-              "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
-
-            script.onload = function () {
-              window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-              renderizarPDF();
-            };
-
-            script.onerror = function () {
-              reject(new Error("Não foi possível carregar PDF.js."));
-            };
-
-            document.head.appendChild(script);
-          });
-        }
-
-        return blob;
-      });
-  }
+  /* Todos os cards usam a mesma página de compartilhamento com imagens do Drive. */
+  var PAGINA_COMPARTILHAMENTO = SITE + "/cards/topico/";
 
   function aviso(mensagem) {
     var toast = document.querySelector(".vg-toast");
@@ -891,122 +774,37 @@
     return atual.titulo + "\n\nA verdade sobre Flávio Bolsonaro: " + atual.link;
   }
 
-  function compartilharArquivoBanco(mensagem) {
-    if (
-      !navigator.share ||
-      !navigator.canShare ||
-      !window.File
-    ) {
-      aviso("Seu navegador não permite compartilhar arquivos diretamente.");
+  function abrirPaginaCompartilhamento() {
+    /* A chamada ocorre diretamente no clique do usuário, evitando bloqueio de pop-up. */
+    var janela = window.open(PAGINA_COMPARTILHAMENTO, "_blank");
+
+    if (!janela) {
+      aviso("Permita pop-ups para abrir a página de compartilhamento.");
       return;
     }
 
-    sortearImagemBanco()
-      .then(function (resultado) {
-        var blob = resultado.blob;
-        var nomeOriginal = resultado.nome;
-        var urlOriginal = resultado.url;
-
-        if (
-          blob.type === "application/pdf" ||
-          /\.pdf$/i.test(nomeOriginal)
-        ) {
-          return carregarImagemParaCompartilhar(urlOriginal).then(function (imagem) {
-            return {
-              blob: imagem,
-              nome: "imagem-compartilhamento.png",
-              tipo: "image/png"
-            };
-          });
-        }
-
-        var tipo = blob.type || "image/jpeg";
-        var extensao = /\.webp$/i.test(nomeOriginal)
-          ? "webp"
-          : /\.png$/i.test(nomeOriginal)
-            ? "png"
-            : "jpg";
-
-        return {
-          blob: blob,
-          nome: "imagem-compartilhamento." + extensao,
-          tipo: tipo
-        };
-      })
-      .then(function (arquivoInfo) {
-        var arquivo = new File(
-          [arquivoInfo.blob],
-          arquivoInfo.nome,
-          { type: arquivoInfo.tipo }
-        );
-
-        if (!navigator.canShare({ files: [arquivo] })) {
-          throw new Error("Compartilhamento de arquivo indisponível.");
-        }
-
-        return navigator.share({
-          files: [arquivo],
-          text: mensagem
-        });
-      })
-      .catch(function (erro) {
-        if (erro && erro.name === "AbortError") return;
-
-        console.error("Falha ao compartilhar o arquivo:", erro);
-        var item = BANCO_IMAGENS.length
-          ? BANCO_IMAGENS[Math.floor(Math.random() * BANCO_IMAGENS.length)]
-          : null;
-
-        if (item && item.link) {
-          var textoWhatsApp = (mensagem || "Confira esta imagem.") + "\n\nImagem: " + item.link;
-          var urlWhatsApp = "https://wa.me/?text=" + encodeURIComponent(textoWhatsApp);
-          window.open(urlWhatsApp, "_blank", "noopener,noreferrer");
-          aviso("O navegador não conseguiu anexar o arquivo. Abrimos o WhatsApp com o link da imagem.");
-          return;
-        }
-
-        aviso("Não foi possível compartilhar. Confira a conexão e o acesso ao arquivo.");
-      });
+    try {
+      janela.opener = null;
+    } catch (e) {}
   }
 
-  
-function zap() {
-  if (!atual) return;
+  function zap() {
+    if (!atual) return;
 
-  marca("whatsapp");
+    marca("whatsapp");
 
-  // Abre a janela imediatamente para evitar bloqueio de pop-up.
-  var janela = window.open("about:blank", "_blank");
+    if (atual.tipo === "card") {
+      abrirPaginaCompartilhamento();
+      return;
+    }
 
-  if (!janela) {
-    aviso("Permita pop-ups para abrir o WhatsApp.");
-    return;
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(texto()),
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
 
-  sortearImagemBanco()
-    .then(function (resultado) {
-      if (!resultado || !resultado.url) {
-        throw new Error("Não foi possível sortear uma imagem.");
-      }
-
-      var mensagem =
-        "Olha esta imagem!\n\n" +
-        resultado.url;
-
-      janela.location.href =
-        "https://wa.me/?text=" +
-        encodeURIComponent(mensagem);
-    })
-    .catch(function (erro) {
-      console.error(erro);
-
-      janela.close();
-
-      aviso("Não foi possível selecionar uma imagem do Drive.");
-    });
-}
-
-   
   function copiar() {
     if (!atual) return;
 
@@ -1047,7 +845,7 @@ function zap() {
     marca("compartilhar");
 
     if (atual.tipo === "card") {
-      compartilharArquivoBanco(texto());
+      abrirPaginaCompartilhamento();
       return;
     }
 
