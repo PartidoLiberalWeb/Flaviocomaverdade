@@ -974,18 +974,15 @@
 
     marca("whatsapp");
 
-    if (atual.tipo === "card") {
-      compartilharArquivoBanco(texto());
-      return;
-    }
+    var mensagem = texto();
 
     window.open(
-      "https://wa.me/?text=" + encodeURIComponent(texto()),
+      "https://wa.me/?text=" + encodeURIComponent(mensagem),
       "_blank",
-      "noopener"
+      "noopener,noreferrer"
     );
   }
-
+   
   function copiar() {
     if (!atual) return;
 
