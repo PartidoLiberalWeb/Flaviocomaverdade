@@ -1,0 +1,13 @@
+PROJETO ORGANIZADO EM HTML, CSS E JAVASCRIPT
+
+Arquivos:
+- index.html: estrutura da página.
+- style.css: importa os arquivos CSS atualmente usados pelo site original.
+- script.js: contém os dois blocos de JavaScript do HTML ligados às esteiras de cards e à janela de compartilhamento.
+
+IMPORTANTE PARA O GITHUB PAGES
+1. Os estilos continuam carregando dos endereços externos flaviocomaverdade.com.br listados em style.css. Se esses endereços deixarem de funcionar, o visual poderá mudar.
+2. O HTML ainda contém outras dependências JavaScript externas e scripts de métricas do site original. Eles foram mantidos para não quebrar funcionalidades que não fazem parte da extração solicitada.
+3. Em script.js, o banco de imagens ainda tem nomes de exemplo (imagem1.jpg etc.). Eles precisam ser substituídos por nomes reais ou por uma lista de URLs públicas. O navegador não consegue enumerar sozinho os arquivos de uma pasta estática.
+4. A base do código usa caminhos absolutos em alguns pontos; para GitHub Pages publicado em /Flaviocomaverdade/, os caminhos de imagens devem ser relativos ou incluir o caminho do repositório.
+5. A separação foi estrutural, não uma reconstrução integral de todas as dependências externas. Teste no Pages depois de publicar.
