@@ -969,19 +969,43 @@
       });
   }
 
-  function zap() {
-    if (!atual) return;
+  
+function zap() {
+  if (!atual) return;
 
-    marca("whatsapp");
+  marca("whatsapp");
 
-    var mensagem = texto();
+  // Abre a janela imediatamente para evitar bloqueio de pop-up.
+  var janela = window.open("about:blank", "_blank");
 
-    window.open(
-      "https://wa.me/?text=" + encodeURIComponent(mensagem),
-      "_blank",
-      "noopener,noreferrer"
-    );
+  if (!janela) {
+    aviso("Permita pop-ups para abrir o WhatsApp.");
+    return;
   }
+
+  sortearImagemBanco()
+    .then(function (resultado) {
+      if (!resultado || !resultado.url) {
+        throw new Error("Não foi possível sortear uma imagem.");
+      }
+
+      var mensagem =
+        "Olha esta imagem!\n\n" +
+        resultado.url;
+
+      janela.location.href =
+        "https://wa.me/?text=" +
+        encodeURIComponent(mensagem);
+    })
+    .catch(function (erro) {
+      console.error(erro);
+
+      janela.close();
+
+      aviso("Não foi possível selecionar uma imagem do Drive.");
+    });
+}
+
    
   function copiar() {
     if (!atual) return;
