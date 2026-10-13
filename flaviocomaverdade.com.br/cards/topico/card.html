@@ -223,7 +223,7 @@
         img.hidden = true;
         error.hidden = false;
       };
-      img.src = "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(randomItem(DRIVE_IMAGE_IDS));
+      img.src = "https://drive.google.com/thumbnail?id=" + encodeURIComponent(randomItem(DRIVE_IMAGE_IDS)) + "&sz=w1000";
       document.getElementById("topico-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(shareText());
     }
 
