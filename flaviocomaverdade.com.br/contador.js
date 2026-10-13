@@ -1,3 +1,4 @@
+```javascript
 /*
  * Contadores próprios do site.
  * Configure API_URL com a URL publicada do Cloudflare Worker.
@@ -5,9 +6,11 @@
  */
 (function () {
   "use strict";
-  var API_URL = "https://contador-api-site.portalverdade13.workers.dev/";
-  if (!API_URL || API_URL.indexOf("https://contador-api-site.portalverdade13.workers.dev/") === 0) {
-    console.warn("Contadores: configure API_URL em contador.js após publicar o Worker.");
+
+  var API_URL = "https://contador-api-site.portalverdade13.workers.dev";
+
+  if (!API_URL) {
+    console.warn("Contadores: API_URL não configurada.");
     return;
   }
 
@@ -16,15 +19,29 @@
       fetch(API_URL.replace(/\/$/, "") + "/track", {
         method: "POST",
         mode: "cors",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           event: evento,
           path: location.pathname,
           referrer: document.referrer || ""
         }),
         keepalive: true
-      }).catch(function () {});
-    } catch (_) {}
+      }).then(function (resposta) {
+        if (!resposta.ok) {
+          console.error(
+            "Erro ao registar contador:",
+            evento,
+            resposta.status
+          );
+        }
+      }).catch(function (erro) {
+        console.error("Falha ao enviar contador:", erro);
+      });
+    } catch (erro) {
+      console.error("Erro no contador:", erro);
+    }
   }
 
   // Conta uma visualização por carregamento de página.
@@ -35,9 +52,11 @@
     var el = event.target && event.target.closest
       ? event.target.closest("a,button,[role='button']")
       : null;
+
     if (!el) return;
 
     var href = (el.getAttribute("href") || "").toLowerCase();
+
     var label = [
       el.innerText || "",
       el.getAttribute("aria-label") || "",
@@ -47,15 +66,22 @@
       el.getAttribute("data-testid") || ""
     ].join(" ").toLowerCase();
 
-    if (/wa\.me|api\.whatsapp\.com|whatsapp\.com\/send/.test(href) ||
-        /whatsapp|bolsozap|click_bolsozap|share_whatsapp/.test(label)) {
+    if (
+      /wa\.me|api\.whatsapp\.com|whatsapp\.com\/send/.test(href) ||
+      /whatsapp|bolsozap|click_bolsozap|share_whatsapp/.test(label)
+    ) {
       enviar("share_whatsapp");
       return;
     }
 
-    if (/copiar\s*(link|url)|copy\s*(link|url)|copy-link|copiar-link/.test(label) ||
-        el.matches("[data-copy-link], [data-action='copy-link'], [data-track*='copy' i], [data-testid*='copy' i]")) {
+    if (
+      /copiar\s*(link|url)|copy\s*(link|url)|copy-link|copiar-link/.test(label) ||
+      el.matches(
+        "[data-copy-link], [data-action='copy-link], [data-track*='copy' i], [data-testid*='copy' i]"
+      )
+    ) {
       enviar("copy_link");
     }
   }, true);
 })();
+```
