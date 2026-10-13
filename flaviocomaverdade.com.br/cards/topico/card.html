@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uma informação do Flávio</title>
+  <meta name="description" content="Uma informação para refletir.">
+  <!-- Reutiliza o CSS principal do site. Este arquivo fica em cards/topico/card.html -->
+  <link rel="stylesheet" href="../../style.css">
+  <style>
+    /* Estilos apenas do conteúdo desta página; identidade geral vem de style.css. */
+    .topico-page { width:min(1120px, calc(100% - 32px)); margin:0 auto; padding:clamp(28px,5vw,64px) 0; }
+    .topico-card { display:grid; grid-template-columns:minmax(0,1fr) minmax(280px, .9fr); overflow:hidden; border-radius:20px; gap:0; }
+    .topico-copy { padding:clamp(24px,5vw,56px); display:flex; flex-direction:column; justify-content:center; }
+    .topico-eyebrow { font-size:.8rem; font-weight:800; letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; }
+    .topico-title { margin:0 0 20px; line-height:1.1; }
+    .topico-message { line-height:1.75; font-size:1.08rem; }
+    .topico-photo { display:flex; align-items:center; justify-content:center; min-height:320px; background:rgba(127,127,127,.08); }
+    .topico-photo img { display:block; width:100%; height:100%; min-height:320px; max-height:650px; object-fit:contain; }
+    .topico-actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; }
+    .topico-actions a,.topico-actions button { cursor:pointer; }
+    .topico-status { font-size:.88rem; margin-top:14px; }
+    @media(max-width:760px) {
+      .topico-card { grid-template-columns:1fr; }
+      .topico-copy { order:1; }
+      .topico-photo { order:2; min-height:240px; }
+      .topico-photo img { min-height:240px; max-height:480px; }
+      .topico-actions > * { flex:1 1 100%; }
+    }
+  </style>
+</head>
+<body class="internal-page internal-page--verdade">
+  <!-- Cabeçalho reaproveitado do index.html principal -->
+  <header class="vdh" id="vdh">
+    <div class="vdh__bar">
+      <a aria-label="Flávio com a Verdade: início" class="vdh__brand" href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/">
+        <img alt="Flávio Bolsonaro 22" decoding="async" height="52" src="https://flaviocomaverdade.com.br/assets/logo-negativa-verde.png">
+      </a>
+      <nav aria-label="Navegação principal" class="vdh__nav">
+        <a href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/">A verdade</a>
+        <a href="https://www.youtube.com/results?search_query=Renan+MBL+Fl%C3%A1vio+Bolsonaro+plano+de+governo" target="_blank" rel="noopener noreferrer">Plano de Governo</a>
+        <a href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/#cards">Cards</a>
+        <a href="https://www.instagram.com/reels/DcMhjuTCO4m/" target="_blank" rel="noopener noreferrer">Vídeos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="topico-page">
+    <section class="topico-card" aria-labelledby="topico-title">
+      <div class="topico-copy">
+        <div class="topico-eyebrow">Flávio com a Verdade</div>
+        <h1 class="topico-title" id="topico-title">Uma informação do Flávio</h1>
+        <p class="topico-message" id="topico-message">Carregando mensagem...</p>
+        <div class="topico-actions">
+          <a class="vdh__ghost" id="topico-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp</a>
+          <button class="vdh__ghost" id="topico-copy" type="button">Copiar link</button>
+          <button class="vdh__ghost" id="topico-next" type="button">Outra mensagem</button>
+        </div>
+        <p class="topico-status" id="topico-status" aria-live="polite"></p>
+      </div>
+      <div class="topico-photo">
+        <img id="topico-image" alt="Imagem do Google Drive" referrerpolicy="no-referrer">
+        <p id="topico-image-error" hidden>Não foi possível carregar a imagem. Verifique se ela está pública no Google Drive.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    var PAGE_URL = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/cards/topico/card.html";
+    // Para variar as imagens, inclua aqui os IDs dos outros arquivos públicos do Drive.
+    var DRIVE_IMAGE_IDS = ["1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO"];
+    var MESSAGES = [
+      "Acompanhar a vida pública é importante: conhecer propostas, fazer perguntas e cobrar resultados ajuda cada cidadão a participar das decisões do país.",
+      "O debate democrático melhora quando há diálogo, responsabilidade e liberdade para comparar ideias. Informação é um convite para pensar e formar a própria opinião.",
+      "O futuro do Brasil também depende da participação dos cidadãos, da atenção às propostas e do acompanhamento das decisões que afetam a sociedade.",
+      "Buscar informação, conversar com respeito e avaliar propostas são atitudes importantes para participar da democracia de forma consciente.",
+      "Uma sociedade mais participativa começa com pessoas interessadas em entender os temas do país e acompanhar a atuação de seus representantes."
+    ];
+    function randomItem(items) { return items[Math.floor(Math.random() * items.length)]; }
+    function shareText() { return "Olha essa informação do Flávio " + PAGE_URL; }
+    function refresh() {
+      document.getElementById("topico-message").textContent = randomItem(MESSAGES);
+      var img = document.getElementById("topico-image");
+      var error = document.getElementById("topico-image-error");
+      error.hidden = true; img.hidden = false;
+      img.onerror = function () { img.hidden = true; error.hidden = false; };
+      img.src = "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(randomItem(DRIVE_IMAGE_IDS));
+      document.getElementById("topico-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(shareText());
+    }
+    document.getElementById("topico-next").addEventListener("click", refresh);
+    document.getElementById("topico-copy").addEventListener("click", function () {
+      var status = document.getElementById("topico-status"), value = shareText();
+      function fallback() {
+        var input = document.createElement("textarea"); input.value = value;
+        input.style.position = "fixed"; input.style.opacity = "0";
+        document.body.appendChild(input); input.select();
+        try { document.execCommand("copy"); status.textContent = "Frase e link copiados."; }
+        catch (e) { status.textContent = "Não foi possível copiar automaticamente: " + value; }
+        input.remove();
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(function () { status.textContent = "Frase e link copiados."; }).catch(fallback);
+      } else fallback();
+    });
+    refresh();
+  })();
+  </script>
+</body>
+</html>
