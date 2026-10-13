@@ -566,7 +566,7 @@
   var SITE = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br";
 
   /* Todos os cards usam a mesma página de compartilhamento com imagens do Drive. */
-  var PAGINA_COMPARTILHAMENTO = SITE + "/cards/topico/";
+  var PAGINA_COMPARTILHAMENTO = SITE + "/cards/topico/card.html";
   var TEXTO_COMPARTILHAMENTO = "olha essa informação do flávio " + PAGINA_COMPARTILHAMENTO;
 
   function aviso(mensagem) {
