@@ -564,10 +564,541 @@
 /* ---------- Videos: compartilhamento e esteira ---------- */
 (function () {
   var SITE = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br";
+  var toast = document.createElement("div");
 
-  /* Todos os cards usam a mesma página de compartilhamento com imagens do Drive. */
-  var PAGINA_COMPARTILHAMENTO = SITE + "/cards/topico/card.html";
-  var TEXTO_COMPARTILHAMENTO = "olha essa informação do flávio " + PAGINA_COMPARTILHAMENTO;
+  toast.className = "vg-toast";
+  toast.setAttribute("role", "status");
+  document.body.appendChild(toast);
+
+  var tt;
+
+  function aviso(t) {
+    toast.textContent = t;
+    toast.classList.add("on");
+    clearTimeout(tt);
+
+    tt = setTimeout(function () {
+      toast.classList.remove("on");
+    }, 3600);
+  }
+
+  function marca(id, acao) {
+    try {
+      (window.dataLayer = window.dataLayer || []).push({
+        event: "video_verdade",
+        acao: acao,
+        video: id
+      });
+    } catch (e) {}
+  }
+
+  function zap(msg, id) {
+    window.open(
+      "https://wa.me/?text=" + encodeURIComponent(
+        msg + "\n" + SITE + "/videos/" + id
+      ),
+      "_blank",
+      "noopener"
+    );
+
+    aviso("Abrindo o WhatsApp… escolha o contato ou grupo.");
+  }
+
+  function compartilhar(id, titulo, fv) {
+    var msg = titulo + "\n\nA verdade sobre Flávio Bolsonaro: " +
+      SITE + "/videos/" + id;
+
+    marca(id, "compartilhar");
+
+    if (navigator.canShare && window.fetch && window.File) {
+      aviso("Preparando o vídeo…");
+
+      fetch(
+        "/assets/verdade/videos/" + id + "-share.mp4" +
+        (fv ? "?v=" + encodeURIComponent(fv) : "")
+      )
+        .then(function (r) {
+          if (!r.ok) throw new Error("Vídeo não encontrado");
+          return r.blob();
+        })
+        .then(function (b) {
+          var f = new File(
+            [b],
+            "flavio-com-a-verdade-" + id + ".mp4",
+            { type: "video/mp4" }
+          );
+
+          if (navigator.canShare({ files: [f] })) {
+            return navigator.share({ files: [f], text: msg })
+              .then(function () { return true; });
+          }
+
+          return false;
+        })
+        .catch(function (e) {
+          return !!(e && e.name === "AbortError");
+        })
+        .then(function (feito) {
+          if (!feito) zap(msg, id);
+        });
+
+      return;
+    }
+
+    if (navigator.share) {
+      navigator.share({
+        title: titulo,
+        text: msg
+      }).catch(function () {});
+      return;
+    }
+
+    zap(msg, id);
+  }
+
+  document.addEventListener("click", function (e) {
+    var s = e.target.closest(".vdv-share");
+
+    if (s) {
+      e.preventDefault();
+      compartilhar(
+        s.getAttribute("data-id"),
+        s.getAttribute("data-t"),
+        s.getAttribute("data-fv")
+      );
+      return;
+    }
+
+    var d = e.target.closest(".vdv-dl");
+    if (d) marca(d.getAttribute("data-id"), "baixar");
+  });
+
+  var box = document.querySelector(".vdv-esteira");
+
+  if (box) {
+    var tr = box.querySelector(".vdv-trilho");
+    var dir = Number(box.getAttribute("data-dir")) || 1;
+    var VEL = 40;
+    var originais = Array.prototype.slice.call(tr.children);
+
+    var reduz = window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var arrastou = false;
+
+    box.addEventListener("click", function (e) {
+      if (arrastou) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
+    var pular = function (sentido) {
+      box.scrollBy({
+        left: sentido * Math.min(window.innerWidth * 0.7, 720),
+        behavior: "smooth"
+      });
+    };
+
+    var faixaV = document.querySelector(".vdv-rows") || box.parentNode;
+
+    [
+      [-1, "‹", "Vídeos anteriores", "ant"],
+      [1, "›", "Próximos vídeos", "prox"]
+    ].forEach(function (s) {
+      var b = document.createElement("button");
+
+      b.type = "button";
+      b.className = "vd-seta vd-seta--" + s[3];
+      b.setAttribute("aria-label", s[2]);
+      b.textContent = s[1];
+
+      b.addEventListener("click", function () {
+        pular(s[0]);
+      });
+
+      faixaV.appendChild(b);
+    });
+
+    if (reduz || !tr.animate) {
+      box.classList.add("parada");
+    } else {
+      var anim = null;
+      var visivel = true;
+      var segurando = false;
+      var emCima = false;
+      var retomar = 0;
+
+      var copiar = function (vezes) {
+        tr.innerHTML = "";
+
+        for (var k2 = 0; k2 < vezes; k2++) {
+          originais.forEach(function (o) {
+            var n = o.cloneNode(true);
+
+            if (k2 > 0) {
+              n.setAttribute("aria-hidden", "true");
+
+              Array.prototype.forEach.call(
+                n.querySelectorAll("a,button"),
+                function (x) {
+                  x.setAttribute("tabindex", "-1");
+                }
+              );
+
+              Array.prototype.forEach.call(
+                n.querySelectorAll("img"),
+                function (im) {
+                  im.alt = "";
+                }
+              );
+            }
+
+            tr.appendChild(n);
+          });
+        }
+      };
+
+      var montar = function () {
+        var tempo = anim
+          ? Number(anim.currentTime || 0) /
+            Number(anim.effect.getTiming().duration || 1)
+          : 0;
+
+        if (anim) anim.cancel();
+
+        copiar(1);
+
+        var um = tr.scrollWidth;
+        if (!um) return;
+
+        var reps = Math.max(1, Math.ceil(window.innerWidth / um) + 1);
+        copiar(reps * 2);
+
+        var dur = Math.max(10000, (tr.scrollWidth / 2 / VEL) * 1000);
+
+        var q = dir === 1
+          ? [
+              { transform: "translate3d(0,0,0)" },
+              { transform: "translate3d(-50%,0,0)" }
+            ]
+          : [
+              { transform: "translate3d(-50%,0,0)" },
+              { transform: "translate3d(0,0,0)" }
+            ];
+
+        anim = tr.animate(q, {
+          duration: dur,
+          iterations: Infinity,
+          easing: "linear"
+        });
+
+        anim.currentTime = tempo * dur;
+
+        if (!visivel || segurando || emCima) anim.pause();
+      };
+
+      var tocar = function () {
+        if (anim && visivel && !emCima && !segurando) anim.play();
+      };
+
+      montar();
+
+      pular = function (sentido) {
+        if (!anim) return;
+
+        var dur = Number(anim.effect.getTiming().duration);
+        var metade = tr.scrollWidth / 2;
+
+        var delta = (
+          -sentido * Math.min(window.innerWidth * 0.7, 720) / metade
+        ) * dur * (dir === 1 ? -1 : 1);
+
+        var de = Number(anim.currentTime || 0);
+        var ini = null;
+
+        clearTimeout(retomar);
+        segurando = true;
+        anim.pause();
+
+        var quadro = function (t) {
+          if (ini === null) ini = t;
+
+          var p = Math.min(1, (t - ini) / 420);
+          var e = 1 - Math.pow(1 - p, 3);
+          var v = (de + delta * e) % dur;
+
+          if (v < 0) v += dur;
+          anim.currentTime = v;
+
+          if (p < 1) {
+            requestAnimationFrame(quadro);
+          } else {
+            segurando = false;
+            retomar = setTimeout(tocar, 1800);
+          }
+        };
+
+        requestAnimationFrame(quadro);
+      };
+
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (en) {
+          visivel = !!en[0].isIntersecting;
+
+          if (visivel) tocar();
+          else if (anim) anim.pause();
+        }).observe(box);
+      }
+
+      box.addEventListener("mouseenter", function () {
+        emCima = true;
+        if (anim) anim.pause();
+      });
+
+      box.addEventListener("mouseleave", function () {
+        emCima = false;
+        tocar();
+      });
+
+      box.addEventListener("focusin", function () {
+        emCima = true;
+        if (anim) anim.pause();
+      });
+
+      box.addEventListener("focusout", function () {
+        emCima = false;
+        tocar();
+      });
+
+      var larg = window.innerWidth;
+
+      window.addEventListener("resize", function () {
+        if (Math.abs(window.innerWidth - larg) > 40) {
+          larg = window.innerWidth;
+          montar();
+        }
+      });
+
+      var x0 = 0;
+      var t0 = 0;
+      var pid = -1;
+      var mexeu = false;
+
+      box.addEventListener("pointerdown", function (e) {
+        if (e.pointerType === "mouse" && e.button !== 0) return;
+
+        segurando = true;
+        mexeu = false;
+        arrastou = false;
+        clearTimeout(retomar);
+
+        if (anim) anim.pause();
+
+        x0 = e.clientX;
+        t0 = Number(anim.currentTime || 0);
+        pid = e.pointerId;
+      });
+
+      box.addEventListener("pointermove", function (e) {
+        if (!segurando || e.pointerId !== pid) return;
+
+        var dx = e.clientX - x0;
+
+        if (Math.abs(dx) > 6) {
+          mexeu = true;
+          arrastou = true;
+        }
+
+        if (!mexeu) return;
+
+        var dur = Number(anim.effect.getTiming().duration);
+        var metade = tr.scrollWidth / 2;
+        var t = (
+          t0 + (dx / metade) * dur * (dir === 1 ? -1 : 1)
+        ) % dur;
+
+        if (t < 0) t += dur;
+        anim.currentTime = t;
+      });
+
+      var soltou = function () {
+        if (!segurando) return;
+
+        segurando = false;
+
+        if (mexeu) {
+          retomar = setTimeout(function () {
+            arrastou = false;
+            tocar();
+          }, 1200);
+        } else {
+          arrastou = false;
+          tocar();
+        }
+      };
+
+      box.addEventListener("pointerup", soltou);
+      box.addEventListener("pointercancel", soltou);
+    }
+  }
+})();
+
+/* ===== BLOCO 3 — JANELA DE CARDS, VÍDEOS E COMPARTILHAMENTO ===== */
+(function () {
+  if (window.vdMidia) return;
+
+  var SITE = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br";
+  var PASTA_BANCO = SITE + "/bancoImagens/";
+
+  /*
+   * Nomes de arquivos conforme lista_arquivos.txt.
+   * Como o navegador não consegue listar automaticamente os arquivos
+   * de uma pasta estática, tentamos os nomes previstos até encontrar
+   * um arquivo que exista.
+   */
+  var BANCO_IMAGENS = [];
+
+  for (var i = 1; i <= 130; i++) {
+    BANCO_IMAGENS.push("Imagem (" + i + ").pdf");
+  }
+
+  for (var i = 1; i <= 7; i++) {
+    BANCO_IMAGENS.push("Imagem (" + i + ").webp");
+  }
+
+  for (var i = 1; i <= 130; i++) {
+    BANCO_IMAGENS.push("Imagem (" + i + ").jpeg");
+    BANCO_IMAGENS.push("Imagem (" + i + ").jpg");
+  }
+
+  for (var i = 1; i <= 215; i++) {
+    BANCO_IMAGENS.push("Imagem (" + i + ").png");
+  }
+
+  function sortearImagemBanco() {
+    var lista = BANCO_IMAGENS.slice();
+
+    for (var i = lista.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = lista[i];
+      lista[i] = lista[j];
+      lista[j] = temp;
+    }
+
+    return tentarArquivo(lista, 0);
+  }
+
+  function tentarArquivo(lista, indice) {
+    if (indice >= lista.length) {
+      return Promise.reject(
+        new Error("Nenhum arquivo válido foi encontrado em bancoImagens.")
+      );
+    }
+
+    var url = PASTA_BANCO + encodeURIComponent(lista[indice]);
+
+    return fetch(url, { method: "GET" })
+      .then(function (resposta) {
+        if (!resposta.ok) {
+          throw new Error("Arquivo indisponível");
+        }
+
+        return resposta.blob().then(function (blob) {
+          return {
+            blob: blob,
+            nome: lista[indice],
+            url: url
+          };
+        });
+      })
+      .catch(function () {
+        return tentarArquivo(lista, indice + 1);
+      });
+  }
+
+  function carregarImagemParaCompartilhar(url) {
+    return fetch(url)
+      .then(function (resposta) {
+        if (!resposta.ok) {
+          throw new Error("Arquivo não encontrado: " + url);
+        }
+
+        return resposta.blob();
+      })
+      .then(function (blob) {
+        if (
+          blob.type === "application/pdf" ||
+          /\.pdf(?:$|[?#])/i.test(url)
+        ) {
+          return new Promise(function (resolve, reject) {
+            function renderizarPDF() {
+              if (!window.pdfjsLib) {
+                reject(new Error("PDF.js não carregou."));
+                return;
+              }
+
+              window.pdfjsLib
+                .getDocument({ data: blob })
+                .promise
+                .then(function (pdf) {
+                  return pdf.getPage(1);
+                })
+                .then(function (pagina) {
+                  var viewport = pagina.getViewport({ scale: 2 });
+                  var canvas = document.createElement("canvas");
+
+                  canvas.width = Math.ceil(viewport.width);
+                  canvas.height = Math.ceil(viewport.height);
+
+                  return pagina.render({
+                    canvasContext: canvas.getContext("2d"),
+                    viewport: viewport
+                  }).promise.then(function () {
+                    return new Promise(function (res, rej) {
+                      canvas.toBlob(function (png) {
+                        canvas.width = 0;
+                        canvas.height = 0;
+
+                        if (png) {
+                          res(png);
+                        } else {
+                          rej(new Error("Falha ao converter PDF em imagem."));
+                        }
+                      }, "image/png");
+                    });
+                  });
+                })
+                .then(resolve, reject);
+            }
+
+            if (window.pdfjsLib) {
+              renderizarPDF();
+              return;
+            }
+
+            var script = document.createElement("script");
+            script.src =
+              "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+
+            script.onload = function () {
+              window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+                "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+              renderizarPDF();
+            };
+
+            script.onerror = function () {
+              reject(new Error("Não foi possível carregar PDF.js."));
+            };
+
+            document.head.appendChild(script);
+          });
+        }
+
+        return blob;
+      });
+  }
 
   function aviso(mensagem) {
     var toast = document.querySelector(".vg-toast");
@@ -705,7 +1236,11 @@
 
     atual = dados(tipo, id, titulo || "", fv);
 
-    if (capa) atual.capa = capa;
+    if (capa) {
+      atual.capa = capa;
+      /* Para cards, use exatamente a imagem do card clicado na prévia. */
+      if (tipo === "card") atual.arquivo = capa;
+    }
 
     midia.innerHTML = "";
 
@@ -772,21 +1307,73 @@
   }
 
   function texto() {
-    return TEXTO_COMPARTILHAMENTO;
+    return atual.titulo + "\n\nA verdade sobre Flávio Bolsonaro: " + atual.link;
   }
 
-  function abrirPaginaCompartilhamento() {
-    /* A chamada ocorre diretamente no clique do usuário, evitando bloqueio de pop-up. */
-    var janela = window.open(PAGINA_COMPARTILHAMENTO, "_blank");
-
-    if (!janela) {
-      aviso("Permita pop-ups para abrir a página de compartilhamento.");
+  function compartilharArquivoBanco(mensagem) {
+    if (
+      !navigator.share ||
+      !navigator.canShare ||
+      !window.File
+    ) {
+      aviso("Seu navegador não permite compartilhar arquivos diretamente.");
       return;
     }
 
-    try {
-      janela.opener = null;
-    } catch (e) {}
+    sortearImagemBanco()
+      .then(function (resultado) {
+        var blob = resultado.blob;
+        var nomeOriginal = resultado.nome;
+        var urlOriginal = resultado.url;
+
+        if (
+          blob.type === "application/pdf" ||
+          /\.pdf$/i.test(nomeOriginal)
+        ) {
+          return carregarImagemParaCompartilhar(urlOriginal).then(function (imagem) {
+            return {
+              blob: imagem,
+              nome: "imagem-compartilhamento.png",
+              tipo: "image/png"
+            };
+          });
+        }
+
+        var tipo = blob.type || "image/jpeg";
+        var extensao = /\.webp$/i.test(nomeOriginal)
+          ? "webp"
+          : /\.png$/i.test(nomeOriginal)
+            ? "png"
+            : "jpg";
+
+        return {
+          blob: blob,
+          nome: "imagem-compartilhamento." + extensao,
+          tipo: tipo
+        };
+      })
+      .then(function (arquivoInfo) {
+        var arquivo = new File(
+          [arquivoInfo.blob],
+          arquivoInfo.nome,
+          { type: arquivoInfo.tipo }
+        );
+
+        if (!navigator.canShare({ files: [arquivo] })) {
+          throw new Error("Compartilhamento de arquivo indisponível.");
+        }
+
+        return navigator.share({
+          files: [arquivo],
+          text: mensagem
+        });
+      })
+      .catch(function (erro) {
+        if (erro && erro.name === "AbortError") return;
+
+        console.error(erro);
+        aviso("Não foi possível compartilhar. Verifique os nomes e caminhos dos arquivos.");
+      });
   }
 
   function zap() {
@@ -794,17 +1381,22 @@
 
     marca("whatsapp");
 
+    if (atual.tipo === "card") {
+      compartilharArquivoBanco(texto());
+      return;
+    }
+
     window.open(
       "https://wa.me/?text=" + encodeURIComponent(texto()),
       "_blank",
-      "noopener,noreferrer"
+      "noopener"
     );
   }
 
   function copiar() {
     if (!atual) return;
 
-    var url = TEXTO_COMPARTILHAMENTO;
+    var url = atual.link;
 
     function sucesso() {
       aviso("Link copiado.");
@@ -841,7 +1433,7 @@
     marca("compartilhar");
 
     if (atual.tipo === "card") {
-      abrirPaginaCompartilhamento();
+      compartilharArquivoBanco(texto());
       return;
     }
 
@@ -971,7 +1563,8 @@
         resultado[1],
         link.getAttribute("data-alt") ||
           (imagem && imagem.alt) ||
-          link.textContent.trim()
+          link.textContent.trim(),
+        imagem ? imagem.src : ""
       );
     } else if (
       (resultado = /^\/videos\/([a-z0-9-]+)$/.exec(href)) &&
@@ -1004,53 +1597,4 @@
     fechar: fechar,
     aviso: aviso
   };
-})();
-
-/* ---------- Página /cards/topico/: conteúdo aleatório e estilo padrão ---------- */
-(function () {
-  var caminho = window.location.pathname.replace(/\/+$/, "");
-  if (!/\/cards\/topico$/.test(caminho)) return;
-
-  var IMAGENS_DRIVE = [
-    "https://drive.google.com/uc?export=view&id=1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO"
-  ];
-  var TEXTOS = [
-    "Flávio acredita que o Brasil pode avançar com mais liberdade, responsabilidade e oportunidades para quem trabalha.",
-    "Uma conversa sobre o Brasil precisa de informação, coragem para debater e compromisso com o futuro.",
-    "A participação de cada cidadão fortalece o debate público e ajuda a construir um país com mais oportunidades.",
-    "Ideias, transparência e participação são importantes para que os brasileiros acompanhem os assuntos que impactam suas vidas.",
-    "Conhecer diferentes informações e refletir sobre elas é parte essencial de uma sociedade livre."
-  ];
-  function sorteio(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
-  function montar() {
-    if (!document.body) return;
-    var antigo = document.getElementById("topico-flavio");
-    if (antigo) antigo.remove();
-    var texto = sorteio(TEXTOS);
-    var imagemUrl = sorteio(IMAGENS_DRIVE);
-    var estilo = document.getElementById("topico-flavio-css");
-    if (!estilo) {
-      estilo = document.createElement("style");
-      estilo.id = "topico-flavio-css";
-      estilo.textContent = `
-        #topico-flavio{box-sizing:border-box;max-width:1100px;margin:clamp(24px,6vw,76px) auto;padding:clamp(18px,4vw,42px);font-family:inherit;color:#172033}
-        #topico-flavio .tf__cabecalho{font-size:clamp(12px,1.5vw,14px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#c5222a;margin:0 0 12px}
-        #topico-flavio .tf__grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);gap:clamp(22px,4vw,48px);align-items:center;background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:clamp(20px,4vw,42px);box-shadow:0 16px 45px rgba(15,23,42,.10)}
-        #topico-flavio h1{font-size:clamp(28px,4vw,44px);line-height:1.12;margin:0 0 18px;color:#111827}
-        #topico-flavio .tf__texto{font-size:clamp(17px,2vw,20px);line-height:1.75;margin:0;color:#374151}
-        #topico-flavio .tf__imagem{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:#f3f4f6;min-height:220px}
-        #topico-flavio .tf__rodape{margin:18px 0 0;color:#6b7280;font-size:13px}
-        @media(max-width:700px){#topico-flavio .tf__grade{grid-template-columns:1fr}#topico-flavio .tf__imagem{max-height:420px}}
-      `;
-      document.head.appendChild(estilo);
-    }
-    var secao = document.createElement("main");
-    secao.id = "topico-flavio";
-    secao.innerHTML = '<p class="tf__cabecalho">Flávio com a Verdade</p><div class="tf__grade"><section><h1>Uma informação para refletir</h1><p class="tf__texto"></p><p class="tf__rodape">Leia, reflita e compartilhe informação.</p></section><img class="tf__imagem" alt="Imagem compartilhada do Flávio" loading="eager"></div>';
-    secao.querySelector(".tf__texto").textContent = texto;
-    secao.querySelector(".tf__imagem").src = imagemUrl;
-    document.body.appendChild(secao);
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", montar, { once: true });
-  else montar();
 })();
