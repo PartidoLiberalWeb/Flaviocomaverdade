@@ -22,3 +22,26 @@
 @import url("https://flaviocomaverdade.com.br/css/revision-r3-20260817.css?v=20260826_02");
 @import url("https://flaviocomaverdade.com.br/css/agenda-newsletter.css");
 @import url("https://flaviocomaverdade.com.br/css/news.css");
+
+
+/* Ajuste da prévia na janela de compartilhamento */
+.vm__midia {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: min(92vw, 720px) !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: 72vh !important;
+  overflow: hidden !important;
+  margin: 0 auto 12px !important;
+}
+.vm__midia .vm__img {
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  max-width: 92vw !important;
+  max-height: 72vh !important;
+  object-fit: contain !important;
+  position: static !important;
+}
