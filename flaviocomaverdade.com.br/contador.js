@@ -1,4 +1,4 @@
-```javascript
+javascript
 /*
  * Contadores próprios do site.
  * Configure API_URL com a URL publicada do Cloudflare Worker.
@@ -84,4 +84,4 @@
     }
   }, true);
 })();
-```
+
