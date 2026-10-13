@@ -1,85 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Resetar visitas</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f4f5;
-      color: #18181b;
-    }
-    main { text-align: center; }
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 14px 24px;
-      background: #b91c1c;
-      color: white;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    button:disabled { opacity: .6; cursor: wait; }
-    #status { min-height: 1.5em; margin-top: 16px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resetar contadores | Flávio com a Verdade</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:32px 16px;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;background:#f3f4f6;color:#1f2937;font-family:Arial,Helvetica,sans-serif}main{width:100%;max-width:560px;padding:28px;background:#fff;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.08)}h1{margin-top:0;font-size:1.6rem}p{line-height:1.5}.actions{display:grid;gap:12px;margin-top:24px}button{width:100%;border:0;border-radius:9px;padding:14px 16px;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;text-align:left}button:disabled{opacity:.6;cursor:wait}.visits{background:#b91c1c}.whatsapp{background:#15803d}.copies{background:#1d4ed8}#status{margin-top:20px;padding:12px;border-radius:8px;white-space:pre-wrap}#status:empty{display:none}.info{font-size:.9rem;color:#4b5563}
+</style>
 </head>
 <body>
-  <main>
-    <button id="resetButton" type="button">Resetar visitas</button>
-    <p id="status" role="status" aria-live="polite"></p>
-  </main>
-
-  <script>
-    "use strict";
-
-    const API_URL = "https://contador-api-site.portalverdade13.workers.dev";
-    const button = document.getElementById("resetButton");
-    const status = document.getElementById("status");
-
-    button.addEventListener("click", async () => {
-      const confirmed = window.confirm(
-        "Tem certeza de que deseja zerar os contadores de visitas? Esta ação pode ser irreversível."
-      );
-      if (!confirmed) return;
-
-      const token = window.prompt("Digite a chave de administração configurada na Cloudflare:");
-      if (!token) {
-        status.textContent = "Operação cancelada.";
-        return;
-      }
-
-      button.disabled = true;
-      status.textContent = "A processar…";
-
-      try {
-        const response = await fetch(API_URL + "/reset", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + token
-          },
-          body: JSON.stringify({ confirm: true })
-        });
-
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          throw new Error(data.error || "Não foi possível resetar. Verifique a configuração da API.");
-        }
-        status.textContent = "Contadores resetados com sucesso.";
-      } catch (error) {
-        status.textContent = "Falha: " + error.message;
-      } finally {
-        button.disabled = false;
-      }
-    });
-  </script>
+<main>
+<h1>Resetar contadores</h1>
+<p>Escolha qual contador deseja zerar. Cada botão afeta somente o contador indicado.</p>
+<div class="actions">
+<button class="visits" data-event="page_view" data-label="visitas">Zerar visitas</button>
+<button class="whatsapp" data-event="share_whatsapp" data-label="compartilhamentos no WhatsApp">Zerar compartilhamentos no WhatsApp</button>
+<button class="copies" data-event="copy_link" data-label="cópias de link">Zerar cópias de link</button>
+</div>
+<p class="info">A página solicitará o token administrativo configurado como <code>RESET_TOKEN</code> no Cloudflare.</p>
+<div id="status" role="status" aria-live="polite"></div>
+</main>
+<script>
+const API_URL = "https://contador-api-site.portalverdade13.workers.dev";
+const statusBox = document.getElementById("status");
+document.querySelectorAll("button[data-event]").forEach((button) => {
+  button.addEventListener("click", async () => {
+    const eventType = button.dataset.event;
+    const label = button.dataset.label;
+    if (!confirm(`Tem certeza de que deseja zerar apenas ${label}? Esta ação não pode ser desfeita.`)) return;
+    const token = prompt("Digite o token administrativo (RESET_TOKEN):");
+    if (!token) { statusBox.textContent = "Operação cancelada: token não informado."; return; }
+    document.querySelectorAll("button[data-event]").forEach((b) => b.disabled = true);
+    statusBox.textContent = `Zerando ${label}...`;
+    try {
+      const response = await fetch(API_URL + "/reset", {
+        method: "POST",
+        headers: {"Content-Type": "application/json", "Authorization": "Bearer " + token},
+        body: JSON.stringify({confirm: true, event: eventType})
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || result.message || `Erro HTTP ${response.status}`);
+      statusBox.textContent = result.message || `Contador de ${label} zerado com sucesso.`;
+    } catch (error) {
+      statusBox.textContent = `Não foi possível zerar o contador. ${error.message}\nVerifique se o Worker foi atualizado para aceitar o campo "event".`;
+    } finally {
+      document.querySelectorAll("button[data-event]").forEach((b) => b.disabled = false);
+    }
+  });
+});
+</script>
 </body>
 </html>
