@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel de estatísticas | Flávio com a Verdade</title>
+  <style>
+    :root{color-scheme:dark;--bg:#100b0c;--panel:#1b1113;--line:#4a2027;--red:#e11d32;--red2:#a90e22;--text:#fff7f7;--muted:#c7aeb2}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#3a1018 0,#100b0c 55%);color:var(--text);font-family:Arial,Helvetica,sans-serif;min-height:100vh}
+    .wrap{width:min(1120px,92%);margin:auto;padding:32px 0 56px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:24px}
+    .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#ff7786;font-weight:800}.brand{font-size:clamp(25px,4vw,38px);font-weight:900;margin:8px 0}.sub{color:var(--muted);margin:0;line-height:1.6}
+    .pill{border:1px solid #6e2631;border-radius:999px;padding:10px 14px;color:#ffdce1;font-size:13px;background:#2a1116}
+    h2{font-size:20px;margin:30px 0 14px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .card{background:linear-gradient(145deg,#251317,#170f11);border:1px solid var(--line);border-radius:18px;padding:24px;min-height:190px;box-shadow:0 14px 40px #0003}
+    .ico{display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:#45141e;color:#ff7181;font-size:23px}
+    .label{margin:20px 0 6px;color:#e4c9cd;font-size:14px}.number{font-size:clamp(34px,5vw,48px);font-weight:900;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+    .foot{margin-top:24px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--muted);font-size:13px}.btn{border:0;border-radius:10px;background:var(--red);color:white;padding:12px 16px;font-weight:800;cursor:pointer}.btn:hover{background:#f03a4d}
+    .note{margin-top:20px;border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--muted);line-height:1.65;background:#180e10;font-size:14px}
+    .error{color:#ff9ba7}.good{color:#94f0b1}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}.card{min-height:160px}.wrap{padding-top:22px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="top">
+      <div>
+        <div class="eyebrow">Painel de dados · PT</div>
+        <h1 class="brand">Flávio com a Verdade</h1>
+        <p class="sub">Acompanhamento de visitas e compartilhamentos do site.</p>
+      </div>
+      <div class="pill" id="status">Aguardando configuração da API</div>
+    </header>
+    <h2>Resumo dos contadores</h2>
+    <section class="grid" aria-live="polite">
+      <article class="card"><div class="ico">◉</div><div class="label">Visualizações de página</div><div class="number" id="visitas">—</div></article>
+      <article class="card"><div class="ico">↗</div><div class="label">Cliques em compartilhar pelo WhatsApp</div><div class="number" id="whatsapp">—</div></article>
+      <article class="card"><div class="ico">▣</div><div class="label">Cliques em copiar link</div><div class="number" id="copias">—</div></article>
+    </section>
+    <div class="foot"><button class="btn" id="refresh">Atualizar dados</button><span id="updated">Os dados ainda não foram carregados.</span></div>
+    <aside class="note">
+      <strong>Sobre os números:</strong> “Visualizações de página” conta carregamentos, não pessoas únicas. Um mesmo visitante pode gerar várias visualizações. Os cliques são contabilizados quando o botão é acionado; isso não confirma que a mensagem foi enviada ou que o link foi efetivamente colado.
+      <br><br><span id="hint">Para ativar, configure a URL do Worker no arquivo contador.js e neste painel.</span>
+    </aside>
+  </main>
+<script>
+(function(){
+  var API_URL="COLOQUE_URL_DO_WORKER_AQUI";
+  var status=document.getElementById("status"), hint=document.getElementById("hint");
+  function fmt(n){return Number(n||0).toLocaleString("pt-BR")}
+  async function carregar(){
+    if(!API_URL||API_URL.indexOf("COLOQUE_URL")===0){
+      status.textContent="API não configurada";status.className="pill error";
+      hint.textContent="Configure API_URL no painel.html e em contador.js depois de publicar a API.";
+      return;
+    }
+    status.textContent="Carregando…";
+    try{
+      var r=await fetch(API_URL.replace(/\/$/,"")+"/stats",{cache:"no-store"});
+      if(!r.ok)throw new Error("HTTP "+r.status);
+      var d=await r.json();
+      document.getElementById("visitas").textContent=fmt(d.visitas);
+      document.getElementById("whatsapp").textContent=fmt(d.compartilhamentos_whatsapp);
+      document.getElementById("copias").textContent=fmt(d.copias_link);
+      status.textContent="API conectada";status.className="pill good";
+      document.getElementById("updated").textContent="Atualizado em "+new Date().toLocaleString("pt-BR");
+      hint.textContent="Dados recebidos da API de contadores.";
+    }catch(e){status.textContent="Não foi possível carregar";status.className="pill error";hint.textContent="Verifique a URL da API, o CORS e a configuração do banco D1. Detalhe: "+e.message;}
+  }
+  document.getElementById("refresh").addEventListener("click",carregar);
+  carregar();
+})();
+</script>
+</body>
+</html>
