@@ -5,8 +5,8 @@
  */
 (function () {
   "use strict";
-  var API_URL = "COLOQUE_URL_DO_WORKER_AQUI";
-  if (!API_URL || API_URL.indexOf("COLOQUE_URL") === 0) {
+  var API_URL = "https://contador-api-site.portalverdade13.workers.dev/";
+  if (!API_URL || API_URL.indexOf("https://contador-api-site.portalverdade13.workers.dev/") === 0) {
     console.warn("Contadores: configure API_URL em contador.js após publicar o Worker.");
     return;
   }
