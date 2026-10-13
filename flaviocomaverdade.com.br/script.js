@@ -567,6 +567,7 @@
 
   /* Todos os cards usam a mesma página de compartilhamento com imagens do Drive. */
   var PAGINA_COMPARTILHAMENTO = SITE + "/cards/topico/";
+  var TEXTO_COMPARTILHAMENTO = "olha essa informação do flávio " + PAGINA_COMPARTILHAMENTO;
 
   function aviso(mensagem) {
     var toast = document.querySelector(".vg-toast");
@@ -771,7 +772,7 @@
   }
 
   function texto() {
-    return atual.titulo + "\n\nA verdade sobre Flávio Bolsonaro: " + atual.link;
+    return TEXTO_COMPARTILHAMENTO;
   }
 
   function abrirPaginaCompartilhamento() {
@@ -793,11 +794,6 @@
 
     marca("whatsapp");
 
-    if (atual.tipo === "card") {
-      abrirPaginaCompartilhamento();
-      return;
-    }
-
     window.open(
       "https://wa.me/?text=" + encodeURIComponent(texto()),
       "_blank",
@@ -808,7 +804,7 @@
   function copiar() {
     if (!atual) return;
 
-    var url = atual.link;
+    var url = TEXTO_COMPARTILHAMENTO;
 
     function sucesso() {
       aviso("Link copiado.");
@@ -1008,4 +1004,53 @@
     fechar: fechar,
     aviso: aviso
   };
+})();
+
+/* ---------- Página /cards/topico/: conteúdo aleatório e estilo padrão ---------- */
+(function () {
+  var caminho = window.location.pathname.replace(/\/+$/, "");
+  if (!/\/cards\/topico$/.test(caminho)) return;
+
+  var IMAGENS_DRIVE = [
+    "https://drive.google.com/uc?export=view&id=1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO"
+  ];
+  var TEXTOS = [
+    "Flávio acredita que o Brasil pode avançar com mais liberdade, responsabilidade e oportunidades para quem trabalha.",
+    "Uma conversa sobre o Brasil precisa de informação, coragem para debater e compromisso com o futuro.",
+    "A participação de cada cidadão fortalece o debate público e ajuda a construir um país com mais oportunidades.",
+    "Ideias, transparência e participação são importantes para que os brasileiros acompanhem os assuntos que impactam suas vidas.",
+    "Conhecer diferentes informações e refletir sobre elas é parte essencial de uma sociedade livre."
+  ];
+  function sorteio(lista) { return lista[Math.floor(Math.random() * lista.length)]; }
+  function montar() {
+    if (!document.body) return;
+    var antigo = document.getElementById("topico-flavio");
+    if (antigo) antigo.remove();
+    var texto = sorteio(TEXTOS);
+    var imagemUrl = sorteio(IMAGENS_DRIVE);
+    var estilo = document.getElementById("topico-flavio-css");
+    if (!estilo) {
+      estilo = document.createElement("style");
+      estilo.id = "topico-flavio-css";
+      estilo.textContent = `
+        #topico-flavio{box-sizing:border-box;max-width:1100px;margin:clamp(24px,6vw,76px) auto;padding:clamp(18px,4vw,42px);font-family:inherit;color:#172033}
+        #topico-flavio .tf__cabecalho{font-size:clamp(12px,1.5vw,14px);font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#c5222a;margin:0 0 12px}
+        #topico-flavio .tf__grade{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);gap:clamp(22px,4vw,48px);align-items:center;background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:clamp(20px,4vw,42px);box-shadow:0 16px 45px rgba(15,23,42,.10)}
+        #topico-flavio h1{font-size:clamp(28px,4vw,44px);line-height:1.12;margin:0 0 18px;color:#111827}
+        #topico-flavio .tf__texto{font-size:clamp(17px,2vw,20px);line-height:1.75;margin:0;color:#374151}
+        #topico-flavio .tf__imagem{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:14px;background:#f3f4f6;min-height:220px}
+        #topico-flavio .tf__rodape{margin:18px 0 0;color:#6b7280;font-size:13px}
+        @media(max-width:700px){#topico-flavio .tf__grade{grid-template-columns:1fr}#topico-flavio .tf__imagem{max-height:420px}}
+      `;
+      document.head.appendChild(estilo);
+    }
+    var secao = document.createElement("main");
+    secao.id = "topico-flavio";
+    secao.innerHTML = '<p class="tf__cabecalho">Flávio com a Verdade</p><div class="tf__grade"><section><h1>Uma informação para refletir</h1><p class="tf__texto"></p><p class="tf__rodape">Leia, reflita e compartilhe informação.</p></section><img class="tf__imagem" alt="Imagem compartilhada do Flávio" loading="eager"></div>';
+    secao.querySelector(".tf__texto").textContent = texto;
+    secao.querySelector(".tf__imagem").src = imagemUrl;
+    document.body.appendChild(secao);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", montar, { once: true });
+  else montar();
 })();
