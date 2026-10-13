@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="pt-BR">
 <head>
@@ -7,8 +6,11 @@
   <title>Uma informação do Flávio</title>
   <meta name="description" content="Uma informação para refletir.">
   <link rel="stylesheet" href="../../style.css">
-
   <style>
+    /*
+      A página reaproveita o CSS principal (style.css) e acrescenta somente
+      os ajustes necessários para organizar o conteúdo do card.
+    */
     .topico-page {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
@@ -151,52 +153,21 @@
     }
   </style>
 </head>
-
 <body class="internal-page internal-page--verdade">
   <header class="vdh" id="vdh">
     <div class="vdh__bar">
-      <a
-        aria-label="Flávio com a Verdade: início"
-        class="vdh__brand"
-        href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/"
-      >
-        <img
-          alt="Flávio Bolsonaro 22"
-          decoding="async"
-          height="52"
-          src="https://flaviocomaverdade.com.br/assets/logo-negativa-verde.png"
-        >
+      <a aria-label="Flávio com a Verdade: início" class="vdh__brand" href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/">
+        <img alt="Flávio Bolsonaro 22" decoding="async" height="52" src="https://flaviocomaverdade.com.br/assets/logo-negativa-verde.png">
       </a>
-
       <nav aria-label="Navegação principal" class="vdh__nav">
         <a href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/">A verdade</a>
-        <a
-          href="https://www.youtube.com/results?search_query=Renan+MBL+Fl%C3%A1vio+Bolsonaro+plano+de+governo"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Plano de Governo</a>
+        <a href="https://www.youtube.com/results?search_query=Renan+MBL+Fl%C3%A1vio+Bolsonaro+plano+de+governo" target="_blank" rel="noopener noreferrer">Plano de Governo</a>
         <a href="https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/#cards">Cards</a>
-        <a
-          href="https://www.instagram.com/reels/DcMhjuTCO4m/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Vídeos</a>
+        <a href="https://www.instagram.com/reels/DcMhjuTCO4m/" target="_blank" rel="noopener noreferrer">Vídeos</a>
       </nav>
-
       <div class="vdh__actions">
-        <a
-          class="vdh__ghost"
-          href="https://www.flaviobolsonaro.com.br/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Site oficial ↗</a>
-
-        <a
-          class="vdh__cta"
-          href="https://wa.me/?text=Olha%20essa%20informa%C3%A7%C3%A3o%20do%20Fl%C3%A1vio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Mandar no WhatsApp</a>
+        <a class="vdh__ghost" href="https://www.flaviobolsonaro.com.br/" target="_blank" rel="noopener noreferrer">Site oficial ↗</a>
+        <a class="vdh__cta" href="https://wa.me/?text=Olha%20essa%20informa%C3%A7%C3%A3o%20do%20Fl%C3%A1vio" target="_blank" rel="noopener noreferrer">Mandar no WhatsApp</a>
       </div>
     </div>
   </header>
@@ -205,46 +176,18 @@
     <section class="topico-card" aria-labelledby="topico-title">
       <div class="topico-copy">
         <div class="topico-eyebrow">Flávio com a Verdade</div>
-
-        <h1 class="topico-title" id="topico-title">
-          Uma informação do Flávio
-        </h1>
-
-        <p class="topico-message" id="topico-message">
-          Carregando mensagem...
-        </p>
-
+        <h1 class="topico-title" id="topico-title">Uma informação do Flávio</h1>
+        <p class="topico-message" id="topico-message">Carregando mensagem...</p>
         <div class="topico-actions">
-          <a
-            class="topico-whatsapp"
-            id="topico-whatsapp"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-          >Compartilhar no WhatsApp →</a>
-
-          <button id="topico-copy" type="button">
-            Copiar link
-          </button>
-
-          <button id="topico-next" type="button">
-            Outra mensagem ↻
-          </button>
+          <a class="topico-whatsapp" id="topico-whatsapp" href="#" target="_blank" rel="noopener noreferrer">Compartilhar no WhatsApp →</a>
+          <button id="topico-copy" type="button">Copiar link</button>
+          <button id="topico-next" type="button">Outra mensagem ↻</button>
         </div>
-
         <p class="topico-status" id="topico-status" aria-live="polite"></p>
       </div>
-
       <div class="topico-photo">
-        <img
-          id="topico-image"
-          alt="Imagem do Google Drive"
-          referrerpolicy="no-referrer"
-        >
-
-        <p class="topico-image-error" id="topico-image-error" hidden>
-          Não foi possível carregar a imagem. Verifique se ela está pública no Google Drive.
-        </p>
+        <img id="topico-image" alt="Imagem do Google Drive" referrerpolicy="no-referrer">
+        <p class="topico-image-error" id="topico-image-error" hidden>Não foi possível carregar a imagem. Verifique se ela está pública no Google Drive.</p>
       </div>
     </section>
   </main>
@@ -252,23 +195,13 @@
   <script>
   (function () {
     "use strict";
-
-    var PAGE_URL =
-      "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/cards/topico/card.html";
-
-    var DRIVE_IMAGE_IDS = [
-      "1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO"
-    ];
-
+    var PAGE_URL = "https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/cards/topico/card.html";
+    var DRIVE_IMAGE_IDS = ["1hn1NW9MHORehvTT4y8ftFmwxAm2gQkh5", "1_jC5J3E3DFUWz_a3FL_LvubeH8SQCHmK", "1mvHggzIQrmSFsTv_pBU_s3YXLeb7FHOp", "1Gi_-zx25kWLe1yNzLC_3hltWi1BezWjl", "1hnQgoodFwGGWSRTEYGz_9ubflfPhNVk4", "1Iv33lP-zM_gfes4TVTLiB9YwZidb6wqM", "17qBftGzYklXLMllTHMlLyl3nRNiq_y4F", "1hg-wDkMxoFddYw5votEOgLK_HoyQ1TbX", "1Y51xGoF-mdL2sFBFhNkZo_Y21PehNydF", "1ilTrJ6TRZoGbadRI3_eMOA2ZeYaxd5RL", "1zaG7F9khnCUwWFBr_s-BOtx8e-lXbyKQ", "1ZjK6otcg6-8RPstolqMq4KuwGcwYWdFd", "1rDOEuzWZr_8Jfg2OAB8lqi8SIHj53xOP", "1Bf5Sg1w4sc6noES25cctNXemfhr7QaT7", "1qNwGAjaupyg5vtvFbGXZM3JXRoQzPfdj", "1grqw6vsZiCIvU4FBbE1x_yUb1Yk0aBNh", "1bACD1X9TLyr5bqQNdHnksFoNpOxBY_tH", "1rxX-u63WlhwlIfNjq02HyjHDGN3UQ8_3", "1f1RWg-rdAUpw0vlmrMsMypbI9qkncqAU", "1K64j6UWg0qU4vOG8LgzOfiWiQ2xR9ObL", "11uNQzCSqM4fVjKES61aEYbp8bnMRCBfH", "13VPVfI7jeUgoibC8PKmskiQHCnwVKcaJ", "1RVL-mB5nBdmsM7yiUosqbB96OmoJyDjX", "1iTzPNVo00XY0PWJZ3Np2XODXP6W9pAMM", "1i3koJqRaegqaZry7a80GYXQw56KSC9xq", "1xySA0M86MtjNnUCUPU2qlkcygIX2z9YE", "1Iz7chsl5QiBtew0oEUcrR5Q1BXNqB5T5", "1AJ2dywhzno3GF5_o7zStbIG_-akG0jHl", "1Kar_piGf45RZPbzvoXleEh3BYGanByhT", "1l5xzaQMIfvO1XndQ6-XywxeRpzJyhUMh", "1-4HFqoz_1Djp3bpo7WtT-H3oSnnMehXe", "13GZWQm0d2XqCNjDYDwT4PvYpFsVlkKZ7", "1zP1zxI4I5pU11y3wK0c7z-N-hjM1-_wC", "1gatWtddHVn4WaDu-sJ3U62z97dsB3Cu_", "1RBjVXpBgoh37pa78ixhuc6RooAFQd4EZ", "1i9gW9kQyY0SuuaCVXVID_OK6-ZQ9iXcz", "1sB9Jk2KNgwqQI-EyT1pcOX7uYiSzMcMw", "1qZd46hdYOiLvVJOGgQDkkew77OeI8Z4F", "1tmC87zmOgYmxA9l9A7BgQ4qoSDh7S8JX", "1RbUjCEmG6R4buQ_HUeyTOebEYMMbygWI", "1B5_AH2i3G5U-x2THof-Wih7TR0-93rei", "1ba-TxMcZex20Gt_ZK0JT5C-a8eyKP4OV", "1P6dIOER9SFX63uBZswDcmXXMAAvenxJo", "1dpNNMAp8xMCm44dvGlh5b-eXfGnom-37", "199oOGeooDrI2u1evPs1diOmpmvycAK_G", "1kyrlJ5zrKkZZEEMX_YGZmkFp9VdJozuD", "1LSngMbtt39f948Q_OhTcbqBwj-WdVHwt", "1sPzEV3cRRxG_8aaYGZJlNxPgfsql3_Fy", "1samcuAgXSBBTIq1pP-ZJr7nblFzDEUsF", "1avp1PMZiHd7E8zR6NYCI70drdUCpH_kx", "1xJfc8EPvzHUv5gohjyzwvoKrOr7Aqvi2", "1YtURBBSrr1_0vh2P70vSHRi1KEUbEVPC", "1mQVwH2v7whbWsfPJ1rBOJbMiTUHNF11w", "1PwQ5VcFcJFTNQAPgcWqUp5M_40MJv8Oi", "1TyRUQN6AQd8o610diddKnWSNBpdzat2I", "1V5eksjkBYJwZ7mlIHijdN8GRf_H-qNjD", "1ACsEVnTpCb6AEhZtteBU__PZciNxIrav", "14q1yZ_TLuvDba1GKjkp4M1cpispD7WEg", "1pEgissxzMr2xKDR5HlaisshOViYmRQWa", "17pzXQUiIXLLeJCLoc7vB99kqA0aMhSJo", "1TEgOnfULTAMPzeIeUt79GdJCqRTqEino", "1yE_Eea5Cq0Crq3I55dGCBvYenwdk7R64", "1K5JIFA3BiTOLF8iW04CPnYUC0kMet420", "1SU_MtPdOm05LwAdfmWHs372z8YZirJQi", "1ninhzON3D68m6xjHIXqXEvGeFl-foBrU", "1LwxCcYEmE50b25OUHCVMdzcpT7g74Mdu", "1XEjPRgO6NqncjjtVTwMvnOnuo367-OCa", "1ZRg4glYgp2_bACzKkkAXNh46Bi3eBfQM", "10HVQInNjLM3-uJzx36XUQUCYY0OUKHfV", "1433GVO2-Z2pNSB_6uYRJd6SPn1f2D32L", "17m_A--LxpkiroUAlwKDJhPskblM5oqxS", "1gG16t_13-ckgOFB7mik_2Qo45i42RRO-", "1FVdp2T4qV36GcfqsYELU1wA9PmavnMIW", "1HVzgRwe3f1BA20Pu-Qs2Um3iKJd0ISPL", "11_5EZWKPN-XQS8MmDeiGJUSYoBzi6UvS", "12pBgkCypVNmEBugn-9Fqu-GILIYTymRU", "16FKdXjVt5c8g6F3CpzRl_xouXrx_BlO8", "18Ip79-8bBKhfgR3hJjpyCgdKFLUsmQ4i", "1C-otUYpgOG1IfBgRr5KFhfxenOdLfHHJ", "1Dn2izHZEezs42Vn0Ap5bmKqcncrB9mqU", "1LTuim4FTNUiOl-0GoFyd5tyoOHiF9BpS", "1RElgWECSt3PX5VQj85psRIl5G7ZzauKX", "1RT0wMbVwsv5yCTuZ6AgoHW1iirZAwoly", "1XACGvYCG-bkXohIowHroxhPcqgSRONqW", "1YtrGcAs0k2g0l89dTAkOEzlHXwORXu-x", "1ZZV-BSNryop1dyzZLGkHWM-ed7BIgyEs", "1q_7dqgu9mJgn5mvaXtMnddnPbLFhpioJ", "1BMgqO0R9zQLjbKXD1TEBrcRF6TO6njmo", "1NbDeuIzE4GOOrBIBxy0SJFtaUG3G9J47", "1LyJcGP3a3dJhURk_egbTchssxjGeXDPB", "1Ysw44flGbQT6M696MmY9VcpqzCiwiaqW", "16vBK_r9H0V_717bmlowsKiSeQkWXELzq", "1sv_M6xab6RHMiqRsEHpZsr6V3mwYiD7q", "1GsILDKZYAN3Bf11P2zxLKCDHz_pEQnTo", "1w0GDsinRckcFpXEA7C9Q_FlSkyNIW3_L", "10Zbw3NZ9bPAnBQ-BTjVPfpnYkey-Lo-3", "1X5k5kOQScJPj0Q45cjrhngJgdfWA-y0O", "1nyyssAdjstxM-YdOD78us5snwD6vC7sY", "1qcMK6SrQ6P2NK0QMi0CHQtzoyJOQ120F", "1wD_EyhmQ6kzohS5lEXMdNRFJRaVPruwU", "1T1fvCR-TjmpknyuZjXuj9Auwy5v1O3wY", "12cOmalWbiiusYKnxCCYYk8vxj6UQOhaA", "17XCDJUEDkwmZxYLhkSFEiSw_YkAWHNaS", "19NmadaseGOPQgtDxc7KBWGkpka5yNzrn", "1CvbJ89oANu7POu6lYVKI_CzlfX-HjRTZ", "1JjNdeAsawB91l-pnteFkCYsmqkThEs3p", "1LcvU8adKBaaSdReMSPTYOAGClKMqgkkP", "1a1kWJwWGh32zo8oLjfqVuy-Qr1gWdno6", "1b5GYvgrXyL8XA3FRWgKADjT2_Zl6TyE-", "1dgJtufeYmnP0S9KLBbouOY6jVPZSs3CK", "1gRZVDhTSEyRJ3F2olIkFb4PMdtgYG8mx", "1i3x8pysVUkDJRBOOvGznzTpspBer1D6l", "1m2_9wNbrcP7znb-CED5kwS91UYcRUeb1", "1n666a1SGD8eqauzhTAtZoxj3iEllIGDJ", "1oZOd2jLMbnVGsrOoHhz7K25TAecVZ1xd", "1oaAPa1VuLi5Mm26mTq5-QJJ5t4CxrJpz", "1pe03rU5recZY4DIs2MxXlOZHr9pR0-Cv", "1q2kHdyH22IJrV04fZhCuZ_8RDZd1ywGr", "1rwpNziltHb7FThHrbcio_mJkE2De6gFB", "1svdda-udouCygKiJattFmRIe692aFONI", "1ugJN71THiMrUt9-Jza42oxPrL38osEhK", "1uqL2R_Fh3xkSIQuamc6t1IVQAzfseuZt", "1urO6ThYbrYXfZTpDu6QxrlZCsLOTgDi0", "1vwMOnlsXEQ5p591GXQpS0zOGADidQMIZ", "1wVfe4FRHK78HUmf77RwxS_UYEgwXsVCa", "1yaOgpE4mODzk0r2v3_Iq7L19lfooyopx", "1z2FZAm2eFbwHdLd2mAZgKO4xb8X5HJf-", "1CpiUP9dDA8BscN5yRRlGyjaNB6TONrwO", "1Ep6anTPM9bB2nhAUsxAXYrhHu__r0uPU", "12b_s8qK8iAB6ppyk60pxrzubKE5_xxeD", "18xYKG0reFom0ceWLw9aOlxRhIRfteWyt", "1mt4mwRYqycVSqLraICCvyWcCDPtk2e54", "1gE6MspNTeiR-JD_k3Yt9rtLOJ4KBR9rR", "1K_xPz-xt4_hYrglnYohRjA1bFJED9lmW", "15KBE-9TLr4NbJEkO_lRX1IJQf09tdj-r", "15-aAuUE6jAcbt8_N_WRdkZx2TqL6sydl", "1gIUx2u5NGNlO5Ia32xGQFJnmvkTy25o0", "146T5hX6sVqnD9Spm5qugMjGKCiSugo-u", "1iQHFcZhbtzAWY5uxTGLxnQOTiemBmj0_", "1TtptxI6QtjAHMCA-u0__9X61gqFiqsxn", "1-xXtkXjcVYlackSXItS8AUFVXHrzM2X6", "1wMuXwkT1V-W1kHrjYKdY4oojQe7MO2Zx", "1my55JDqyV4TIO6dVAU7z1DP572GfmrlF", "1o8YfwRX070ekQE6ghFawF_HVaxHZGUZc", "1tZLb8bWgZ4_pnSj-T43Vw1-e0BL6mXjr", "12FJm50bvtOHVxAbCP9L8owV6AYcjLQ5Z", "1RpfzOhPe5VWKvOxW9bjXaiQChCTr5hF1", "1cTw3kmsI3nVEfQItR72nb5ufdJ26WOr7", "1Gw2iRINKjJpwx5J462tJOUxLaRTMm2Zc", "1kXKvStRunvXNAj4RiXdRX0gk9b0i1S46", "15VZPaGMT5EC4K2D5SMu3lvsrgf2UE9KY", "1Urq0CB5ACMqEDplgBBpWG_W-zJq8AfbD", "1dxyW5DRijdrJ9DTW81ovy6ggouR_QFF7", "1QJVCt2JFdx_85WBhfJQjI-hkY7Q-A7OF", "16IzASw3A98sLSoh_XhDNfJCFs47vMTR4", "16SKAdGzJqQR30Nd4x6FxDLLn0AeNNMpr", "17GIfeUa8KQKx1cYleOTpgvkjWxErnoN1", "1N7ZI3Hx8zVo2C_wMx4k2fdjRR8heKB4c", "1g7U680cKU8yalDK6Vh2QTl9gEIkasDXS", "1jwILL6BCfjZyk414t9b0DpCKVTLrJNmP", "1suLcQCxL0w-uI4DwAu7wxNNfVhtHen3B", "17UHLMQAfHv6FLA1beYn1YLVtQkXpDHhZ", "1AVBepjV4SNagv1wJhdmiibdj7h2ZLbbn", "1VMfztEHht4-yODRO2TPsWAbwvboHMON8", "1baVXY6QjR9lkO5g3Y8JrxvsU_fU6uC1A", "1jLg1yNZMM2O6AkVW_9oBeIh4IV0cD4yO", "13aSPTvlx39pTsMCM0mVlY7E-IQd4R3s0", "1Gc75OCw9kkTLUdOfqzKe9lPt4O6Y-XOw", "1JUdNaKmRodbs4HCLn4ZAbuOBS77jZAs-", "1NbsdXdq92MHsC38PGJbqBqz7vX2w9EVo", "1jlAG9c7h-HMLuw9ImAew9nYObjoyGDJd", "1n5KA7E0cxzCOoJBfCn5QYIP21Vizj4q9", "1o9tUHH8CoAMaWZODkU6AROo2cLeki8Gi", "1uAYQOiP-99laVXpLsmWca09HL_tx2JAt", "10gJ17B5UYu7V9tr3edylSEEkw1uOrtNW", "11R-RGLueYehzsj18xVLw4Eognt2HaipE", "16thbZ3S94BXnJrueyLDbxDsOmi-wvq7c", "1IiF-7BZTx1b3PSRK_Nh3iPLRhlyB1i8W", "1NVxH-7WOCOMo5gUl8nF-ZvwfPzJS4mvw", "1XIITyNxCJQbL3BLkBfUZf8ojOcYN4tyK", "1islhH9p1jMVmecgUG5NaG_gOx5i6OYCB", "1vAi3uA5naq0zzoLKAw-J1u3X9Ob5qNaU", "12XTA4vq3_-LCura1RHTAOZDEqQsAWYL6", "13bhCCHFztSe5YUCoa9z6ToYS_oCeKbIY", "18XfcLtlTsBevO_fQd-q0c_LLEgh6OdqU", "1HtlXso0gX3wlU9kR8dVq_X-_sgaNbSmE", "1JqwCtVO3tNe26qprpni_-ps6Ted3PqxX", "1Wz8EgJ-Qvbyw3pujxRK8UNgNlSu4cDZ8", "1cfdf8P3yYB7zIg453lCHUb1Ftjuoz951", "1eD5eYG3hisKlamkjj2kU4uI64V9wm2S4", "11Ovlv7rvzDHtl2jz0PYuVmuOr47D3wz_", "16iumfImtBHysSL-vkZGmE2qRaQlGeNtV", "18bjVq3zL1-NygAP8E2YzREUzvW9oE2gM", "1Fi5HEximVRkOPw60BMqMBUV5JR8l2lLB", "1ImKWOBMUfwxwsWOo2ojhj7K3JyLG1N_x", "1ac3T2mq8mVDQCB2WJi9Kupv0OR1auX_G", "1nn0FCf5FGRTbw4yp09RAg8RGoemXfc3k", "1tO9JVbHcPyIuP-hOzGVeBn4VnYKKq_kb", "1bzet5uqApyfIEemRDC3oUaCM0Hht3E_A", "1d20X0yRfrh6hEqKsU2TmVV0-Dw3a0ls-", "12wOp4yaGW1DnSA8WD3wguGQYqvldYt5J", "14iqXFEqXmOLiMyTj4yLAn4qkjWA3QD-R", "16EpA2DC3HupXYDL0kq10fv1995trFTSr", "1C95ZYHOEKF86-M_Sb9rLd0auZBno0nHr", "1KfX2L0O3QEGXSLmW8bBWiIAvhQVO4m1q", "1XaK5lkVDBfhEZIoBaOYZ61SVkrivjSO-", "11fEhb5reMpgs-pv0JAeLsq2d3oKpXxBf", "19tW648QSSnUwoO9czzxOB1Pd2eme02px", "1IllATrSiugrlpYc7dNSo7OlQEu8A0jf9", "1JUf9cVTF4_7D-KTUZfFY9n1Y_wY9AGfV", "1JvqrU1yH2iitGJ_nuNqbJRdRaBUNasqF", "1W8j8DTkbUaUcBCs4SqW86RJUXXqR6xrk", "1kJHOihvkCitm_55Yj7A0siOMa2f-dBLh", "1uitQbyxfFB3N35Hp0d08p5l83DhndoDL", "16xkm43MA7FndBJoTo1BdpHl1jx0nlr4O", "19pEgbkllEw80bZUv8jiO84MUVpxuWd4T", "1AN182QzxbWf4Qmq_mgYB2zGAgxjQZN83", "1SRVtSN6nVIOj-orFPXyijubkXcjzZpB4", "1Z3XooLm61RT0-s3FwrOP_A_2KEE00Tq2", "1cRRYwqLiBK70d6Fjo-xp-yh3VjbUTiQG", "1iJzvVenokRzz7J6d4zt3b0tycg1CsOCK", "1ouy7N1jBZtAPynsd5YJVepYLrJwgAcWx", "1wuc0iXnwEcRNNfSpyhCXj-n77pN_T2W-", "1UOwRG-qe1urtjFFvA_AN4Qh4lrTQ8OTQ", "1HtPSS1vSvSM1i-aZiWwjdQmjnEXpSKJ_", "11qgCh5loiK0WtyjCt9lrl4Vgw_05qPB5", "1qei8STta1ulVgZUvOsb4QhOICd5gA9zT", "1BeXMTMOmPK5Mi0sCLtNpXdaODGc55xr-", "1oDwksIu-m6eJ6mJbQDjhwsvix7RpGGOM", "1J2foBWWBd-c0foBY8EbdpmyZGrp40W0T", "1epn6JGQ8oZPTbX_4qogUoR7N9KSjuo3X", "1e4OEjbX9Dr58Lzq1qOkAYo6GkDHAFBfO", "1a3l_FooidB51xxdEuKPTnGztP6HW7BlX", "1-I1gJpwBEzQN9zW3c_9sfT2NJdPqujAe", "18xNYUejFO3oq0GCTx5fcndRAAxw6iVWY", "1T758Hnt7si6jk1usy5Zp9jW2QjPz5uLu", "1mY7kQ0VZezyH9jAZiRExn9MapNZVwYyt", "1svzy-DDh62J1liJ635ZnOsmARsZWcwMu", "140L_wwUsL2yf1vq11mXbWZ47cp9IlkWd", "1B8WYxZ1cu_dGSA6AYUQIM8W6wJ98SpDY", "1Cwvh-fJ3UmqxjAh6-JOtb6v4x03jOn-_", "1DlBYauDyBf_Zy3lzycf9qbxvLDGoh4fp", "1IxRQhSSVkL9syW75c_krSHl23xC_f7TO", "1UIc1O8cn8OpE-AZsDZmqsRwCWoN5ciVE", "1bcICmAT8IRPNeYwVYelEA_q2lim-Xaob", "1p-52vCU3g-_IClUmhGbBzoC6vrC0WR9C", "18hC7H7LfGmvd3bhsEFSuBXw8H4thKryt", "1jXCAsPcPrtrzFHGa_YDUd1GVcBq6N-b5", "1ygtIJQWLEcJcGRsnxztNEeCUPAGuA4Ff", "1bzYpT0JxIck9afFB-Iq87PUum0vG6fqX", "19lxZd0nEpZVFJRHvKZH6Kc-NE6_dZdxd", "1WdAAIpuMiPxmYBH9wboRlsvOtE2p2VF9", "1NCVfzkVhMkNmU-_bwGRn32X-vE7VyXz9", "1emJhDH6l7rxNo1CMJUuilNvEmXKXdGu1", "11y7C0vGdO922zoFXi9oXnXWl0AwiGDxT", "1vp_afxTO_AgIqmQs28dpgGvyT_lbnh5a", "1eKdHwRUsrv9esUN3G2xDU-PQRdVbG87-", "1lzpgnqbCBzDELX0T_w_7DGHp6gnkewCs", "1YwXygHrQ3eFy4msdO3tzixo6hrmzdMHY", "1aXzvfHxEmS-KzgRPJuZC40qe2ia32cTq", "1qJgDvlJQAaEbHPAuPZlEZXwglfwNJaWR", "1fqAldH2BtRGSp0FoYzfK0Badt6FL75ow", "1HFw395tYPdQmN5AitkwFySg01bjZYwsZ", "1Az_rG7LSESK00Tq3_Nb20R2fQQc3W8Rh", "1ASqY_3hj_z0l7SxdVcGSDISFVxfM7Oqv", "146-GXYnoUB8ab6VUy-3kbga_d2Cn-bfP", "1SRvP56CaTZbBgcWumkV89F3Z2M_-nCJE", "1Yk-msrz5Hmt0zCzosLc6q79hUM5mGxlX", "1j6cDgbpYq5mFFtHYlbTMAGgKiYi-AvBg", "1nzSmgmRgCQYrKG0PnW8CNAidOTXPVGHA", "1xUBywbIaFbVqZ6DPt7kq1niNk-hb6D7T", "1DW09hLx9S7_gI6UF7K3MyJQFIyVJdfDI", "17kGArp0GOAgZqmDNBMswlFI-o-fyMtKr", "1JvUyWzI-TlunWcpLH2U68BEzwrbScI5N", "1T8z68ZHr2zMuO8bj8vep2R8n9XUevSL-", "1I4ozRkeI9VV1ZTGlOoGNn3xsnVRxMI9o", "1BRLWItrUsFDr4Va11lsTh3OCO968cIdT", "1JEw38R2SBysT6GC4fmOJBZuK15W7A6x9", "1ex2iFc4617H_DLY4lgkY2iZV_qJm2Hsl", "1vjPtP9VDnZRf6NGXl78-TjBRuXbpI4J2", "1f0Mi6hH8ZDrBtRN9okkmaNpLAOFys9XQ", "1Iv5tTD-jFX34IBWxfYjo_Gq0G_Yme48p", "1o7NfA3v_bidJas4STXRvPsUj9BmEr_ul", "1D2tWMSsnEmE2FEZSclcMyds83E153O72", "1XUbPHXtKnErTXAewHMPJeUv9mUVIxcD-", "1iriPpF9ivnm5-UJDPJ1dhBExf0GbNc5F", "1iDcM6UPo3yhisnYU_kE-jskQsvNavod0", "1OdTiI96PztfcR2uU5uZ9OZRYs4WGsklP", "16TTFBidgciON5nBMEf6SxomZXE6pXy8v", "13_xHVuWW9vdX9FXFhkopIaijZi-YRKi0", "1InrJ5bTeA9dXDKbtrTrksyxr5jIGjrEb", "1RLwSau9LpMtCZhWzM6ONUYwszV03g8YB", "1jkxTuC2heFv_5CYwSfr_AFSdL0XFN8Cx", "1zJ_bAFcgkOSz_fEX6rNo9W5q818ITImb", "1EJCM4H529kWEFW26fRMDZcmC7JSOXkn-", "10i4LjENq6-cYRCJdXw2RbUv8J8OKXJKN", "13qyIL55NDBPd9vgj66GFxyz9WRNUs16L", "16NIH8s6mtndfb8HHruAwIv5fJWNNP1a1", "1hstK_YRmsHpOgfVezS1UGg65MiFmZfkE", "1-MtNEFnwbI8KjBV1y3XgdgvauXIHVtaV", "1oNHuibBtfeq3I_18nC6TslAslTieTwe_", "18YZTbAC-Cd5d6jpYOZLZ400jfouW8Wrt", "1Vxk71-ohflt-5_nNso9oB9stJY_xurqq", "1vwBKgXmnyXNMNjO3RAE6ktpjWvNBuhtR", "17CAI1tNzBCWMZAC6eQqxrR0be4vVUMP8", "1MUQ6u6ueBHWQTgJ65l6b4XkjcMiA9BVy", "1bCgn0c6ifMPgHtIZFNx0zYrl_7TK93nt", "16uZXRyj7VSiE8QrxuBXIY21fjhgazlKG", "1D6SFIlCOSqnzzfEsJ3e3LBsB2ZBUWcyP", "1UtnJmH-8cGNL1MxV3lc_UVA9JdRafo1x", "16seE4Dtiw9YUQwQz2GQJe-jKBeYEPUeN", "1AFMyxrWvyW2sTz6vwPx9iBAu2fHnFmQh", "19uK6FjqTVn9XP1tBNeuUay0ZwCONFFfc", "1I8AwhhyGAqces3qXENra7japGgRGwwtc", "1s6X1_O9TvuP7sc1uwRD-G9PvBbanr3s6", "1NUuFJsYXVijvwzLHKWUjlIGvAvCTMfe2", "1iHPOuMjpP8ZNK0QKaxgQr34whkGMu4yO", "1m_Y0kLL5i8y4EBpqq4D0xppgpNMlEYsx", "1C4BvbDTrUUxmpN3q574ygYxg13-ANV1i", "156krftVZmUvJFO5TiiqoNbkPIptRA2wD", "1uXkjxcpi7OTg9oP8WPk0HmC40xYMjeUG", "1Ynt2beo_coSpJTxnXtk51nfw0VTyyndi", "1IA9MJ3Z-RbMUxZmHZtfB1hHZAufngV3h", "18nhKwxPCoK17K3Yf1gaV0dQd65Lwwb_B", "1ryaDuZpt2N-AQnwO_i5nm_vif39HRtdi", "1m4QfMZN3DgH8MPnJMcE1YOclEX-ERlfW", "1LkGQCeHAdJBngXXUyJ89Motbx87Ao_Ut", "1j_fKycji1ucKFxZaQzk8jvhHJ_3XMHhZ", "1AOPCw2MpJ4qCN0yEsWmfYO0zvV6l9VsB", "1vIz8gIFfwqqOEATc7vB9RAaEz_l4WJsr", "1rAjLGgpPGsz4Xvxk1Iw60v4q3dHxpC_Q", "1FYweYi__Bv5U5Lq7Vn1aeFPDt6q0ibVw", "19M3t1zloile0edbJB32SQW13uuaMtpYp", "18dI8bjmVrJ6aQKaHdEZOD5TQRP4dsB3_", "1qAwuoIeF706UKcjMu0xJnFPvgopfoeZP", "1GTLQHdsusjsNnndoH409R6mpcP6zpk5A", "1hIaDCEEdLpGD_uD76wnnMfQNAF-xcERU", "1a_URm-_OOiVvvfxk_LSafRGxEQQGD32u", "105cE8TpNR_34LoW-bUwPH9ZAbByNz-Ul", "1rBop73KFLOPGPM8lW-GqdkCFW0UwVwRb", "1dWGuILOSfjMhvsWR4gBU5ijLpK9nDl-5", "1p2ejPjqz1TAYPdBf7cIYPta2flQZFTsb", "1-0Ifgls4ju6XTlsL0_iZJCvpgAlAM2tz", "1glGEGARr-y8J1Ta1LhS82OTzAyIBCDog", "1oEt146FknAp0lpSE9xYS2yZL1BI6HXO1", "1DOcpf_BmC4Yu6Q7IOE1mKFggg3RglH1d", "1JZlmhapCgEraUY_lOZNwtPB5JPjvtvkD", "1bsIRiihZUGgdbKrbvj7zX_M3_5G3pzrf", "15k3ziaksdaZIXHkDEEk80_6MR-NGXCq8", "1dYGhmOmfmMbZbCGuqDxPrsPqpRi-LrNJ", "1J5NQeqleokz2U10M3XhJCZawh3jWgUtO", "1lFPQZYt6OH2bY-8286N7zBIxrW7pEksL", "1tAfxWY_D2mpL-Za8ATGuYQVIKUN8lyKZ", "1KLJbjaPNVAKWrJ8VFY2EDVR3Wm3Cbb0-", "1T1L72haFBrksJmCX65JRQZ255cVAqJ-S", "1TiwnYDnRhhgV77YY4HLdkX-xfmmdgANR", "1e0ZqlUvoTs1JUf8PqUgQ8KV39zUc3UKd", "1MnCfffCGDesQCH4syGyjpnfYe0VQGXGj", "1QI4ZQYhcqb4Dd8fVD0PfKUTW-E3NPrio", "1qVXwOp7k8qjvIVt-ZaNHQzXUuTW2ru8Y", "1_iSHmWBy__BAlWqO3NFbBDrqPe6sjSQu", "16Mqo3t-YEuTtj1HlyA8cY-wmfMVOHqlo", "1w6zEyVX3a1PJajNfL0Bdu2Db53ysB3Yt", "1wIQIfXCL1_BrLcKO4Ehga72uSE0xUeiU", "1KRrVevoXzXP52EXGvKPR3kzq0Tu67x-5", "1ilUMO25qGKf6X9SctxvzhVIx2yBKa3-0", "10klGTbjSTFTn-amZO4UyU8ZtkxvTktvf", "12FuUaO1GK9_zGjdFNsPy3F9fVE816Gmh", "12ukjhGbo-TQMCwNMCItZAwnUoEpvnztq", "18M4PCkgzLaLT_Gawp81QTwsJZQh5HiaH", "19HASYfPGWSCCN1mIBrckHitIexp1Z_dD", "19cJnIzsWKBh5ok5i4zrlRKR6ZurSCq5A", "1A0N59VJw8ai7S1vsJyH_8Bbqzk7z_ymP", "1AQX8diex5w5r61faBym_OPZd4MPvaxD4", "1AcK8tTx5Z02_SpmVbvMeTjaVsopZKQ4g", "1B-z6du1KIdTvPryzWzudDWg-iFzz6Bhm", "1CJ-hMO6boANgmNZVMQ6R69-FVcnjGxSH", "1JPKPVwcOXATbTTAwx0fkpE68UGgWhD5D", "1QW8MvHRuwAJ231Fad97WcoIpgxim-rBf", "1QnRATIVkxJ9TaYANoq1NvhJlBJN5bknc", "1Tj4wBXk86hAfsgVcvenCLmuUix6vl3bO", "1VUghexO-nox1AjtrbnQgIrQd4Ksoo7yj", "1WDkU3ctrkNoS1ZbbgTmEC0bn-P7oOAKT", "1XY95kD-6GYSjNOb7h_dcLhZCYe1WcVm-", "1ZFfEEXWrNJDhRznxCkxVLuiztIhIVOOm", "1Z_E4JmdiWSesZVv7DL7YA9Hr_XWh5DF-", "1_WLL67TE_K9mFd5qZaGxzsnK2m0qTekc", "1hVyxcRCom3QdTIgD54KrmP3ziMdIJz4M", "1ilPGcWbw2KxUngpR0ynPVfUmAy4Z4SFd", "1jNOH2x9howoEfi-OyiIXem4G1rZjK0gG", "1mEAotp8NOQpjn_9k8ydFOt-wZK9P_zgp", "1rgbFOEgpWWADq3HzWRZkV8Qv1qmEmyDP", "1tDCKPc5RfbgulSYlPQZ0wNoBZN4epWcE", "1u6xGBmhTu6hdqayBg78Kh7I_3ZBVc1-r", "18zmy5PouDNdwt8kiy3A5o1HbQLWf3NCU", "1YNZ2xjtdhDjosHQjQcrfFQt0RMu_-UJe", "1FmfARpPo4Aiu9qqKarnPUsN0E9GPHrDz", "1KiA3wQ_IL0ZLgGQdDN1p52SONY4tHsdO", "1k_vFM2ytl0kOETLkzqC_cnoCVRp5BEQg", "1d2Nzr-f0Z4hyVLMhinOfbid0mpHL_dj7", "1xLphHkKQ9d81QZbz60nVRO9wExSDb6l9", "1JQTgfxIBcL7ll39lem8OXOVCqm-zN6ZX", "1uZlpyjEAeLXqR5Xluxt294B276iQfibZ", "1v4BBJ3HVSSy04mzLlghbbA2xewLcN-1M", "1e7Z0AexQjk2Qtjve3a6kqigaDd6-U1Wq", "1hR9nYgvbIwx68Re3Y78ro4l1JOxvLeRg", "19snK8R7YYgNIKcsO0l7luohkquEPJcjP", "1H3RF2R6NcrLxtsktXPD3JvtSd5dtar7a", "1Ooh1a3A9axt6vncJZoM0lMS_OcjJTvM5", "1-GlMAQfOHzm8LIIJ7pWa8InNDgQ6WBQv", "12pLxhjIFzoWDtAbTBDkMDf-I2ZIQGjAZ", "1A4nLtKeG6TcDJJUpBpaoLeXqT3RhixW1", "1w1q73kOv5NK2UdxCFxeRVBN9EqfaroDF", "1FFj1aF1Ku5nfAYCjk1rGrKclLubaL6Eu"];
     var MESSAGES = [
       "Acompanhar a vida pública é importante: conhecer propostas, fazer perguntas e cobrar resultados ajuda cada cidadão a participar das decisões do país.",
-
       "O debate democrático melhora quando há diálogo, responsabilidade e liberdade para comparar ideias. Informação é um convite para pensar e formar a própria opinião.",
-
       "O futuro do Brasil também depende da participação dos cidadãos, da atenção às propostas e do acompanhamento das decisões que afetam a sociedade.",
-
       "Buscar informação, conversar com respeito e avaliar propostas são atitudes importantes para participar da democracia de forma consciente.",
-
       "Uma sociedade mais participativa começa com pessoas interessadas em entender os temas do país e acompanhar a atuação de seus representantes."
     ];
 
@@ -281,66 +214,48 @@
     }
 
     function refresh() {
-      document.getElementById("topico-message").textContent =
-        randomItem(MESSAGES);
-
+      document.getElementById("topico-message").textContent = randomItem(MESSAGES);
       var img = document.getElementById("topico-image");
       var error = document.getElementById("topico-image-error");
-
       error.hidden = true;
       img.hidden = false;
-
       img.onerror = function () {
         img.hidden = true;
         error.hidden = false;
       };
-
-      img.src =
-        "https://drive.google.com/uc?export=view&id=" +
-        encodeURIComponent(randomItem(DRIVE_IMAGE_IDS));
-
-      document.getElementById("topico-whatsapp").href =
-        "https://wa.me/?text=" + encodeURIComponent(shareText());
+      img.src = "https://drive.google.com/uc?export=view&id=" + encodeURIComponent(randomItem(DRIVE_IMAGE_IDS));
+      document.getElementById("topico-whatsapp").href = "https://wa.me/?text=" + encodeURIComponent(shareText());
     }
 
-    document.getElementById("topico-next")
-      .addEventListener("click", refresh);
+    document.getElementById("topico-next").addEventListener("click", refresh);
+    document.getElementById("topico-copy").addEventListener("click", function () {
+      var status = document.getElementById("topico-status");
+      var value = shareText();
 
-    document.getElementById("topico-copy")
-      .addEventListener("click", function () {
-        var status = document.getElementById("topico-status");
-        var value = shareText();
-
-        function fallback() {
-          var input = document.createElement("textarea");
-          input.value = value;
-          input.style.position = "fixed";
-          input.style.opacity = "0";
-
-          document.body.appendChild(input);
-          input.select();
-
-          try {
-            document.execCommand("copy");
-            status.textContent = "Frase e link copiados.";
-          } catch (e) {
-            status.textContent =
-              "Não foi possível copiar automaticamente: " + value;
-          }
-
-          input.remove();
+      function fallback() {
+        var input = document.createElement("textarea");
+        input.value = value;
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.appendChild(input);
+        input.select();
+        try {
+          document.execCommand("copy");
+          status.textContent = "Frase e link copiados.";
+        } catch (e) {
+          status.textContent = "Não foi possível copiar automaticamente: " + value;
         }
+        input.remove();
+      }
 
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(value)
-            .then(function () {
-              status.textContent = "Frase e link copiados.";
-            })
-            .catch(fallback);
-        } else {
-          fallback();
-        }
-      });
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value)
+          .then(function () { status.textContent = "Frase e link copiados."; })
+          .catch(fallback);
+      } else {
+        fallback();
+      }
+    });
 
     refresh();
   })();
