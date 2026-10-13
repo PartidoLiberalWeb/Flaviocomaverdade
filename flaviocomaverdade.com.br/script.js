@@ -1307,6 +1307,9 @@
   }
 
   function texto() {
+    if (atual && atual.tipo === "card") {
+      return "Olha essa informação do Flávio https://partidoliberalweb.github.io/Flaviocomaverdade/flaviocomaverdade.com.br/cards/topico/card.html";
+    }
     return atual.titulo + "\n\nA verdade sobre Flávio Bolsonaro: " + atual.link;
   }
 
@@ -1376,103 +1379,63 @@
       });
   }
 
-  function zap() {
-    if (!atual) return;
-
-    marca("whatsapp");
-
-    if (atual.tipo === "card") {
-      compartilharArquivoBanco(texto());
-      return;
-    }
-
-    window.open(
-      "https://wa.me/?text=" + encodeURIComponent(texto()),
-      "_blank",
-      "noopener"
-    );
-  }
-
-  function copiar() {
-    if (!atual) return;
-
-    var url = atual.link;
-
-    function sucesso() {
-      aviso("Link copiado.");
-    }
-
+  function copiarTextoCompartilhamento(conteudo, mensagemSucesso) {
     function alternativa() {
       var campo = document.createElement("textarea");
-      campo.value = url;
+      campo.value = conteudo;
       campo.style.position = "fixed";
       campo.style.opacity = "0";
       document.body.appendChild(campo);
       campo.select();
-
-      try {
-        document.execCommand("copy");
-        sucesso();
-      } catch (e) {
-        aviso("Copie este link: " + url);
-      }
-
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) {}
       campo.remove();
+      if (ok) aviso(mensagemSucesso || "Mensagem copiada.");
+      else aviso("Não foi possível copiar automaticamente. Copie esta mensagem: " + conteudo);
     }
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(sucesso, alternativa);
+      navigator.clipboard.writeText(conteudo).then(function () {
+        aviso(mensagemSucesso || "Mensagem copiada.");
+      }, alternativa);
     } else {
       alternativa();
     }
   }
 
+  function zap() {
+    if (!atual) return;
+    marca("whatsapp");
+    var mensagem = texto();
+    window.open("https://wa.me/?text=" + encodeURIComponent(mensagem), "_blank", "noopener");
+  }
+
+  function copiar() {
+    if (!atual) return;
+    copiarTextoCompartilhamento(texto(), "Mensagem para compartilhar copiada.");
+  }
+
   function compartilhar() {
     if (!atual) return;
-
     marca("compartilhar");
+    var mensagem = texto();
 
-    if (atual.tipo === "card") {
-      compartilharArquivoBanco(texto());
-      return;
-    }
-
-    if (
-      navigator.canShare &&
-      window.fetch &&
-      window.File &&
-      navigator.share
-    ) {
-      fetch(atual.leve)
-        .then(function (resposta) {
-          if (!resposta.ok) throw new Error("Vídeo não encontrado.");
-          return resposta.blob();
-        })
-        .then(function (blob) {
-          var arquivo = new File(
-            [blob],
-            atual.nome,
-            { type: blob.type || atual.mime }
-          );
-
-          if (!navigator.canShare({ files: [arquivo] })) {
-            throw new Error("Compartilhamento indisponível.");
-          }
-
-          return navigator.share({
-            files: [arquivo],
-            text: texto()
+    if (navigator.share) {
+      try {
+        var promessa = navigator.share({ title: "Flávio com a Verdade", text: mensagem });
+        if (promessa && promessa.catch) {
+          promessa.catch(function (erro) {
+            if (erro && erro.name === "AbortError") return;
+            copiarTextoCompartilhamento(mensagem, "Mensagem copiada para compartilhar.");
           });
-        })
-        .catch(function (erro) {
-          if (erro && erro.name === "AbortError") return;
-          aviso("Não foi possível compartilhar o vídeo neste navegador.");
-        });
-
+        }
+      } catch (erro) {
+        copiarTextoCompartilhamento(mensagem, "Mensagem copiada para compartilhar.");
+      }
       return;
     }
 
-    aviso("Este navegador não permite compartilhar arquivos diretamente.");
+    copiarTextoCompartilhamento(mensagem, "Seu navegador não abriu o menu de compartilhamento. A mensagem foi copiada.");
   }
 
   box.addEventListener("click", function (evento) {
